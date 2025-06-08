@@ -4,6 +4,36 @@
 
 {% block content %}
 <div class="container-fluid py-4">
+    <!-- Emergency Button -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <button id="emergencyButton" class="btn btn-danger btn-lg">
+                <i class="fas fa-exclamation-circle"></i> Get Emergency Legal Help
+            </button>
+            <div id="emergencyStatus" class="mt-2" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <span class="ms-2">Finding lawyers near you...</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Emergency Results Modal -->
+    <div class="modal fade" id="emergencyModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Emergency Legal Help</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="emergencyResults"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <!-- Sidebar -->
         <div class="col-md-3">
@@ -39,7 +69,7 @@
                 <hr>
                 
                 <div class="d-grid gap-2">
-                    <a href="{{ url_for('upload_page') }}" class="btn btn-primary btn-sm">
+                    <a href="{{ url_for('upload_file') }}" class="btn btn-primary btn-sm">
                         <i class="fas fa-upload"></i> Check Document
                     </a>
                     <a href="{{ url_for('chat') }}" class="btn btn-success btn-sm">
@@ -135,7 +165,7 @@
                 <div class="tab-pane fade" id="documents">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h2>My Documents</h2>
-                        <a href="{{ url_for('upload_page') }}" class="btn btn-primary">
+                        <a href="{{ url_for('upload_file') }}" class="btn btn-primary">
                             <i class="fas fa-upload"></i> Upload New Document
                         </a>
                     </div>
@@ -172,7 +202,7 @@
                             <i class="fas fa-file-upload text-muted" style="font-size: 4rem;"></i>
                             <h4 class="mt-3">No Documents Yet</h4>
                             <p class="text-muted">Upload your first legal document for AI analysis.</p>
-                            <a href="{{ url_for('upload_page') }}" class="btn btn-primary">Upload Document</a>
+                            <a href="{{ url_for('upload_file') }}" class="btn btn-primary">Upload Document</a>
                         </div>
                     {% endif %}
                 </div>
@@ -240,4 +270,84 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.getElementById('emergencyButton').addEventListener('click', function() {
+    const statusDiv = document.getElementById('emergencyStatus');
+    const resultsDiv = document.getElementById('emergencyResults');
+    
+    statusDiv.style.display = 'block';
+    
+    // Request geolocation
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            
+            // Call backend API
+            fetch(`/api/emergency-lawyers?lat=${lat}&lng=${lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    statusDiv.style.display = 'none';
+                    
+                    if (data.success && data.lawyers.length > 0) {
+                        let html = `<div class="list-group">`;
+                        data.lawyers.forEach(lawyer => {
+                            html += `
+                                <div class="list-group-item">
+                                    <h5 class="mb-1">${lawyer.full_name}</h5>
+                                    <p class="mb-1">
+                                        <strong>Distance:</strong> ${lawyer.distance} km<br>
+                                        <strong>Specializations:</strong> ${lawyer.specializations.join(', ')}<br>
+                                        <strong>Languages:</strong> ${lawyer.languages.join(', ')}
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small>${lawyer.verified ? '<span class="badge bg-success">Verified</span>' : ''}</small>
+                                        <a href="tel:${lawyer.phone}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-phone"></i> Call Now
+                                        </a>
+                                    </div>
+                                </div>`;
+                        });
+                        html += `</div>`;
+                        resultsDiv.innerHTML = html;
+                    } else {
+                        resultsDiv.innerHTML = `
+                            <div class="alert alert-warning">
+                                No lawyers found in your area. Please try increasing the search radius or call emergency services.
+                            </div>`;
+                    }
+                    
+                    // Show modal
+                    new bootstrap.Modal(document.getElementById('emergencyModal')).show();
+                })
+                .catch(error => {
+                    statusDiv.style.display = 'none';
+                    resultsDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            Error finding lawyers. Please try again or call emergency services.
+                        </div>`;
+                    new bootstrap.Modal(document.getElementById('emergencyModal')).show();
+                });
+        }, function(error) {
+            statusDiv.style.display = 'none';
+            resultsDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    Could not get your location. Please enable location services and try again.
+                </div>`;
+            new bootstrap.Modal(document.getElementById('emergencyModal')).show();
+        });
+    } else {
+        statusDiv.style.display = 'none';
+        resultsDiv.innerHTML = `
+            <div class="alert alert-danger">
+                Your browser doesn't support geolocation. Please use a modern browser.
+            </div>`;
+        new bootstrap.Modal(document.getElementById('emergencyModal')).show();
+    }
+});
+</script>
 {% endblock %}

@@ -47,7 +47,13 @@
                 </div>
                 <div class="card-body">
                     <div class="law-content">
-                        {{ law.description | replace('\n', '<br>') | safe }}
+                        {% if law.description %}
+                            {{ law.description | replace('\n', '<br>') | safe }}
+                        {% elif law.detailed_description %}
+                            {{ law.detailed_description | replace('\n', '<br>') | safe }}
+                        {% else %}
+                            <p>No detailed description available.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>

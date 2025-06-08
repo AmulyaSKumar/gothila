@@ -1,0 +1,76 @@
+{% extends "base_nyaya.html" %}
+
+{% block title %}My Lawyers - Nyaya{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>My Lawyers</h1>
+                <a href="{{ url_for('find_lawyer') }}" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Find More Lawyers
+                </a>
+            </div>
+            
+            {% if connections %}
+                <div class="row">
+                    {% for connection in connections %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">{{ connection.lawyer.full_name }}</h5>
+                                <span class="badge bg-{% if connection.connection.status == 'active' %}success{% elif connection.connection.status == 'pending' %}warning{% else %}secondary{% endif %}">
+                                    {{ connection.connection.status|title }}
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <strong>Case:</strong>
+                                    <p>{{ connection.connection.case_description }}</p>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Urgency:</strong>
+                                    <span class="badge bg-{% if connection.connection.urgency == 'high' %}danger{% elif connection.connection.urgency == 'normal' %}warning{% else %}info{% endif %}">
+                                        {{ connection.connection.urgency|title }}
+                                    </span>
+                                </div>
+                                
+                                {% if connection.latest_message %}
+                                <div class="mb-3">
+                                    <strong>Latest Message:</strong>
+                                    <div class="border rounded p-2 mt-1">
+                                        <small class="text-muted">{{ connection.latest_message.timestamp|datetime }}</small>
+                                        <p class="mb-0">{{ connection.latest_message.message|truncate(100) }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <a href="{{ url_for('lawyer_conversation', connection_id=connection.connection_id) }}" class="btn btn-primary w-100">
+                                    <i class="fas fa-comments"></i> View Conversation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-user-tie text-muted" style="font-size: 4rem;"></i>
+                    <h4 class="mt-3">No Lawyer Connections</h4>
+                    <p class="text-muted">Connect with verified lawyers for personalized legal assistance.</p>
+                    <a href="{{ url_for('find_lawyer') }}" class="btn btn-primary">Find Lawyers</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add any additional JavaScript functionality here
+</script>
+{% endblock %}

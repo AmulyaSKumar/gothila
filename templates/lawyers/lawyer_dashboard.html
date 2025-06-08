@@ -1,0 +1,104 @@
+{% extends "base_nyaya.html" %}
+
+{% block title %}Lawyer Dashboard - Nyaya{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Lawyer Profile Summary -->
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">My Profile</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="bg-dark text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px;">
+                        <i class="fas fa-user-tie" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4>{{ current_user.full_name }}</h4>
+                    <p class="text-muted">{{ current_user.email }}</p>
+                    
+                    {% if current_user.verified %}
+                    <div class="mb-3">
+                        <span class="badge bg-dark"><i class="fas fa-check"></i> Verified</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Stats</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <h4>{{ connections|length }}</h4>
+                            <p class="text-muted">Clients</p>
+                        </div>
+                        <div class="col-4">
+                            <h4>{{ current_user.rating|default('0.0') }}</h4>
+                            <p class="text-muted">Rating</p>
+                        </div>
+                        <div class="col-4">
+                            <h4>{{ current_user.total_reviews|default('0') }}</h4>
+                            <p class="text-muted">Reviews</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Client Connections -->
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">My Clients</h5>
+                </div>
+                <div class="card-body">
+                    {% if connections %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Client</th>
+                                        <th>Case</th>
+                                        <th>Status</th>
+                                        <th>Last Message</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for connection in connections %}
+                                    <tr>
+                                        <td>{{ connection.user.full_name }}</td>
+                                        <td>{{ connection.case_description|truncate(30) }}</td>
+                                        <td>
+                                            <span class="badge bg-{% if connection.status == 'active' %}dark{% elif connection.status == 'pending' %}secondary{% else %}light text-dark{% endif %}">
+                                                {{ connection.status|title }}
+                                            </span>
+                                        </td>
+                                        <td>{{ connection.last_message_date|datetime }}</td>
+                                        <td>
+                                            <a href="{{ url_for('lawyer_conversation', connection_id=connection.id) }}" class="btn btn-sm btn-dark">
+                                                <i class="fas fa-comments"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-users text-muted" style="font-size: 3rem;"></i>
+                            <h4 class="mt-3">No Clients Yet</h4>
+                            <p class="text-muted">You don't have any client connections yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

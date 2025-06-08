@@ -2,18 +2,59 @@
 Law Library - User-friendly explanations of Indian laws for people with no legal background
 """
 import google.generativeai as genai
+import os
+import json
+import random
+from dotenv import load_dotenv
+load_dotenv()
 
 class LawLibrary:
     """Comprehensive law library with user-friendly explanations"""
     
     def __init__(self):
         # Configure Gemini 2.0 Flash API
-        api_key = "AIzaSyB55sz3cuGqePKJlZKolIDzJLRUXAOSeoc"
+        api_key=os.getenv("GENAI_API_KEY")
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel('gemini-2.0-flash-exp')
         
-        # Predefined law cards with simple explanations
-        self.law_cards = {
+        # Load laws from JSON database
+        print("Initializing LawLibrary class...")
+        self.law_cards = self._load_laws_database()
+        
+    def _load_laws_database(self):
+        """Load laws from the JSON database file"""
+        try:
+            print("Attempting to load laws_database.json...")
+            with open('data/laws_database.json', 'r', encoding='utf-8') as f:
+                laws_data = json.load(f)
+            
+            print(f"Successfully loaded {len(laws_data)} laws from laws_database.json")
+                
+            # Convert the list of laws to a dictionary with id as key
+            law_cards = {}
+            for law in laws_data:
+                law_id = law.get('id')
+                if law_id:
+                    # Transform the data structure to match the expected format
+                    law_cards[law_id] = {
+                        'id': law_id,
+                        'title': law.get('title', ''),
+                        'category': law.get('category', ''),
+                        'state': law.get('state', 'All India'),
+                        'summary': law.get('summary', ''),
+                        'description': law.get('detailed_description', ''),
+                        'punishment': law.get('punishment', ''),
+                        'related_sections': [law.get('act', '')],
+                        'faqs': law.get('faqs', [])
+                    }
+            
+            print(f"Converted {len(law_cards)} laws to law_cards dictionary")
+            print(f"First law ID: {next(iter(law_cards.keys()), 'None')}")
+            return law_cards
+        except FileNotFoundError:
+            print("Warning: laws_database.json file not found")
+            print(f"Current working directory: {os.getcwd()}")
+            return {
             # Road Safety & Traffic Laws
             'bike_accident': {
                 'title': 'Bike Accident Laws',
@@ -279,37 +320,61 @@ class LawLibrary:
         query_lower = query.lower()
         
         for law_id, law_data in self.law_cards.items():
-            # Check if query matches title, summary, or description
-            if (query_lower in law_data['title'].lower() or 
-                query_lower in law_data['summary'].lower() or 
-                query_lower in law_data['description'].lower() or
-                any(query_lower in section.lower() for section in law_data['related_sections'])):
+            # Check if query matches keywords (highest priority)
+            keywords_match = False
+            if 'keywords' in law_data:
+                for keyword in law_data['keywords']:
+                    if query_lower in keyword.lower():
+                        keywords_match = True
+                        break
+            
+            # Check if query matches title, summary, description, or related sections
+            if (keywords_match or
+                query_lower in law_data.get('title', '').lower() or 
+                query_lower in law_data.get('summary', '').lower() or 
+                query_lower in law_data.get('description', '').lower() or
+                any(query_lower in section.lower() for section in law_data.get('related_sections', []))):
                 
                 # Apply filters
-                if category and law_data['category'] != category:
+                if category and law_data.get('category', '') != category:
                     continue
-                if state and state != 'All India' and law_data['state'] != state and law_data['state'] != 'All India':
+                if state and state != 'All India' and law_data.get('state', '') != state and law_data.get('state', '') != 'All India':
                     continue
                 
                 results.append({
                     'id': law_id,
-                    'title': law_data['title'],
-                    'category': law_data['category'],
-                    'state': law_data['state'],
-                    'summary': law_data['summary']
+                    'title': law_data.get('title', ''),
+                    'category': law_data.get('category', ''),
+                    'state': law_data.get('state', 'All India'),
+                    'summary': law_data.get('summary', '')
                 })
         
         return results
     
     def get_law_details(self, law_id: str) -> dict:
         """Get detailed information about a specific law"""
-        return self.law_cards.get(law_id, {})
+        law_data = self.law_cards.get(law_id, {})
+        
+        # Ensure all required fields are present
+        if law_data:
+            # Make sure the law has an id field
+            if 'id' not in law_data:
+                law_data['id'] = law_id
+                
+            # Ensure all required fields have at least empty values
+            for field in ['title', 'category', 'state', 'summary', 'description', 'punishment', 'related_sections', 'faqs']:
+                if field not in law_data:
+                    law_data[field] = '' if field not in ['related_sections', 'faqs'] else []
+        
+        return law_data
     
     def get_categories(self) -> list:
         """Get all available law categories"""
         categories = set()
         for law_data in self.law_cards.values():
-            categories.add(law_data['category'])
+            category = law_data.get('category')
+            if category:
+                categories.add(category)
         return sorted(list(categories))
     
     def get_states(self) -> list:

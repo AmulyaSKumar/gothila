@@ -291,4 +291,48 @@ class GeneratedDocument:
             'generated_content': self.generated_content,
             'form_data': self.form_data,
             'created_date': self.created_date
-        } 
+        }
+
+class Lawyer:
+    def __init__(self, lawyer_data=None):
+        if lawyer_data is None:
+            lawyer_data = {}
+            
+        self.id = lawyer_data.get('id')
+        self.user_id = lawyer_data.get('user_id')
+        self.full_name = lawyer_data.get('full_name')
+        self.email = lawyer_data.get('email')
+        self.phone = lawyer_data.get('phone')
+        self.specializations = lawyer_data.get('specializations', [])
+        self.experience_years = lawyer_data.get('experience_years', 0)
+        self.bar_council_id = lawyer_data.get('bar_council_id')
+        self.location = lawyer_data.get('location')  # Format: "lat,lng"
+        self.address = lawyer_data.get('address')
+        self.bio = lawyer_data.get('bio')
+        self.languages = lawyer_data.get('languages', [])
+        self.available = lawyer_data.get('available', True)
+        self.verified = lawyer_data.get('verified', False)
+        self.rating = lawyer_data.get('rating', 0.0)
+        self.consultation_fee = lawyer_data.get('consultation_fee')
+        self.verification_document = lawyer_data.get('verification_document')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'full_name': self.full_name,
+            'email': self.email,
+            'phone': self.phone,
+            'specializations': self.specializations,
+            'experience_years': self.experience_years,
+            'bar_council_id': self.bar_council_id,
+            'location': self.location,
+            'address': self.address,
+            'bio': self.bio,
+            'languages': self.languages,
+            'available': self.available,
+            'verified': self.verified,
+            'rating': self.rating,
+            'consultation_fee': self.consultation_fee,
+            'verification_document': self.verification_document
+        }

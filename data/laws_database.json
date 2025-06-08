@@ -181,5 +181,251 @@
       {"q": "When can security deposit be forfeited?", "a": "Only for actual damages, unpaid rent, or breach of agreement terms."},
       {"q": "What if landlord refuses to return deposit?", "a": "File complaint in rent court or consumer court for refund with interest."}
     ]
+  },
+  {
+    "id": "ipc_376",
+    "keywords": ["rape", "sexual assault", "sexual offense", "women safety", "sexual harassment"],
+    "title": "Section 376 IPC – Rape and Sexual Offenses",
+    "act": "Indian Penal Code, 1860",
+    "summary": "Defines rape and prescribes punishment for sexual offenses against women with imprisonment of not less than 7 years which may extend to life imprisonment.",
+    "detailed_description": "This section covers rape and other sexual offenses. It includes aggravated forms of rape with enhanced punishments. The law also covers marital rape in certain circumstances.",
+    "punishment": "Imprisonment not less than 7 years, may extend to life imprisonment + fine. Aggravated rape: 10 years to life imprisonment",
+    "category": "Criminal",
+    "subcategory": "Women Protection",
+    "state": "All India",
+    "language": "en",
+    "bailable": false,
+    "cognizable": true,
+    "faqs": [
+      {"q": "Is this a bailable offense?", "a": "No, rape is a non-bailable offense under IPC."},
+      {"q": "What is the punishment for gang rape?", "a": "Not less than 20 years imprisonment which may extend to life imprisonment or death."},
+      {"q": "Can the case be withdrawn?", "a": "No, once FIR is filed, the case cannot be withdrawn by the complainant."}
+    ]
+  },
+  {
+    "id": "ipc_498a",
+    "keywords": ["dowry harassment", "cruelty by husband", "domestic violence", "dowry demand", "in-laws harassment"],
+    "title": "Section 498A IPC – Cruelty by Husband or In-Laws",
+    "act": "Indian Penal Code, 1860",
+    "summary": "Punishment for cruelty by husband or relatives of husband towards a married woman, including dowry-related harassment.",
+    "detailed_description": "This section deals with cruelty by husband or his relatives towards a married woman. It covers physical and mental cruelty, including dowry demands and harassment.",
+    "punishment": "Imprisonment up to 3 years + fine",
+    "category": "Criminal",
+    "subcategory": "Women Protection",
+    "state": "All India",
+    "language": "en",
+    "bailable": false,
+    "cognizable": true,
+    "faqs": [
+      {"q": "What constitutes cruelty under 498A?", "a": "Physical violence, mental harassment, dowry demands, threats, or conduct that drives a woman to suicide."},
+      {"q": "Can in-laws be arrested under this section?", "a": "Yes, husband and his relatives can be arrested for cruelty."},
+      {"q": "Is this case non-bailable?", "a": "Yes, Section 498A is non-bailable and cognizable."}
+    ]
+  },
+  {
+    "id": "ipc_420",
+    "keywords": ["fraud", "cheating", "dishonesty", "financial fraud", "criminal breach of trust"],
+    "title": "Section 420 IPC – Cheating and Dishonestly Inducing Delivery of Property",
+    "act": "Indian Penal Code, 1860",
+    "summary": "Punishment for cheating and dishonestly inducing any person to deliver any property or to make, alter or destroy any valuable security.",
+    "detailed_description": "This section covers cheating that involves inducing someone to part with property or valuable security through deception. It's commonly used in fraud cases.",
+    "punishment": "Imprisonment up to 7 years + fine",
+    "category": "Criminal",
+    "subcategory": "Fraud",
+    "state": "All India",
+    "language": "en",
+    "bailable": false,
+    "cognizable": true,
+    "faqs": [
+      {"q": "What is the difference between Section 415 and 420?", "a": "Section 415 is simple cheating, 420 involves inducing delivery of property."},
+      {"q": "Can I file 420 for online fraud?", "a": "Yes, online fraud also falls under Section 420 IPC."},
+      {"q": "Is compound interest recovery covered?", "a": "Yes, fraudulent compound interest schemes are covered under this section."}
+    ]
+  },
+  {
+    "id": "negotiable_instruments_act",
+    "keywords": ["cheque bounce", "dishonor of cheque", "bank payment", "promissory note", "bill of exchange"],
+    "title": "Section 138 NI Act – Dishonor of Cheque",
+    "act": "Negotiable Instruments Act, 1881",
+    "summary": "Punishment for dishonor of cheque for insufficiency of funds or exceeding arranged credit with the bank.",
+    "detailed_description": "This section deals with criminal liability when a cheque is dishonored due to insufficient funds or exceeding credit arrangements. The drawer can be punished if proper legal notice is given.",
+    "punishment": "Imprisonment up to 2 years OR fine up to twice the cheque amount OR both",
+    "category": "Criminal",
+    "subcategory": "Financial",
+    "state": "All India",
+    "language": "en",
+    "bailable": true,
+    "cognizable": false,
+    "faqs": [
+      {"q": "How to file case for cheque bounce?", "a": "Send legal notice within 30 days of dishonor, then file complaint in court within 30 days if no payment."},
+      {"q": "What is the time limit for filing case?", "a": "Must file within 30 days of expiry of legal notice period."},
+      {"q": "Can I recover the cheque amount?", "a": "Yes, court can order payment of cheque amount plus compensation."}
+    ]
+  },
+  {
+    "id": "sexual_harassment_workplace",
+    "keywords": ["workplace harassment", "sexual harassment", "women safety at work", "POSH act", "internal committee"],
+    "title": "Sexual Harassment at Workplace Act 2013",
+    "act": "Sexual Harassment of Women at Workplace Act, 2013",
+    "summary": "Provides protection against sexual harassment of women at workplace and for prevention and redressal of such complaints.",
+    "detailed_description": "The Act mandates constitution of Internal Committee in every workplace with 10+ employees. It defines sexual harassment and provides detailed procedure for complaint and inquiry.",
+    "punishment": "Disciplinary action against employee. Employer non-compliance: ₹50,000 fine + license cancellation",
+    "category": "Criminal",
+    "subcategory": "Women Protection",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "What constitutes sexual harassment at workplace?", "a": "Unwelcome sexual advances, requests for sexual favors, or other verbal/physical conduct of sexual nature."},
+      {"q": "How to file complaint?", "a": "File written complaint with Internal Committee within 3 months of incident."},
+      {"q": "What if company has no Internal Committee?", "a": "File complaint with Local Committee constituted by District Collector."}
+    ]
+  },
+  {
+    "id": "right_to_information",
+    "keywords": ["RTI", "right to information", "government transparency", "public information", "information disclosure"],
+    "title": "Right to Information Act 2005",
+    "act": "Right to Information Act, 2005",
+    "summary": "Provides citizens the right to access information from public authorities to promote transparency and accountability in government.",
+    "detailed_description": "The Act empowers citizens to seek information from public authorities. It mandates disclosure of information within 30 days and provides for penalties for non-compliance.",
+    "punishment": "Information Officer penalty: ₹250 per day for delay up to ₹25,000. Appeal lies to higher authorities",
+    "category": "Constitutional",
+    "subcategory": "Fundamental Rights",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "How to file RTI application?", "a": "Submit written application with ₹10 fee to Public Information Officer of concerned department."},
+      {"q": "What information can be sought?", "a": "Any information except exempted categories like national security, personal privacy, etc."},
+      {"q": "Time limit for reply?", "a": "30 days for normal cases, 48 hours for life and death matters."}
+    ]
+  },
+  {
+    "id": "environmental_protection",
+    "keywords": ["pollution", "environment protection", "air pollution", "water pollution", "noise pollution"],
+    "title": "Environment Protection Act 1986",
+    "act": "Environment Protection Act, 1986",
+    "summary": "Provides for protection and improvement of environment and prevention of hazards to human beings, animals, and plants.",
+    "detailed_description": "The Act empowers central government to take measures for protecting environment, controlling pollution, and establishing environmental standards.",
+    "punishment": "Imprisonment up to 5 years + fine up to ₹1 lakh. Repeat offense: additional imprisonment up to 7 years",
+    "category": "Environmental",
+    "subcategory": "Pollution Control",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "How to file pollution complaint?", "a": "File complaint with State Pollution Control Board or District Collector."},
+      {"q": "What are common environmental violations?", "a": "Industrial discharge, noise pollution, air pollution, illegal dumping of waste."},
+      {"q": "Can I get compensation for pollution damage?", "a": "Yes, National Green Tribunal can award compensation for environmental damage."}
+    ]
+  },
+  {
+    "id": "child_protection",
+    "keywords": ["child abuse", "child protection", "juvenile justice", "child rights", "child labor"],
+    "title": "Protection of Children from Sexual Offenses Act 2012",
+    "act": "POCSO Act, 2012",
+    "summary": "Provides protection to children from sexual abuse and exploitation with child-friendly legal procedures and enhanced punishments.",
+    "detailed_description": "The Act defines various forms of sexual abuse against children and prescribes stringent punishments. It establishes special courts and procedures for speedy trial.",
+    "punishment": "Penetrative sexual assault: 7 years to life imprisonment. Aggravated forms: 10 years to life + fine",
+    "category": "Criminal",
+    "subcategory": "Child Protection",
+    "state": "All India",
+    "language": "en",
+    "bailable": false,
+    "cognizable": true,
+    "faqs": [
+      {"q": "What is the age limit under POCSO?", "a": "The Act protects all children below 18 years of age."},
+      {"q": "Is this a serious offense?", "a": "Yes, all offenses under POCSO are non-bailable and have mandatory minimum sentences."},
+      {"q": "How to report child abuse?", "a": "Report to local police, Childline 1098, or Child Welfare Committee."}
+    ]
+  },
+  {
+    "id": "food_safety_act",
+    "keywords": ["food safety", "food adulteration", "food quality", "restaurant hygiene", "food poisoning"],
+    "title": "Food Safety and Standards Act 2006",
+    "act": "Food Safety and Standards Act, 2006",
+    "summary": "Regulates food safety and standards in India, prohibits sale of unsafe food, and provides for food testing and certification.",
+    "detailed_description": "The Act establishes Food Safety and Standards Authority of India (FSSAI) to regulate food safety. It covers food licensing, standards, testing, and penalties for violations.",
+    "punishment": "Imprisonment up to 6 months + fine up to ₹5 lakhs. Serious violations: 7 years imprisonment + ₹10 lakh fine",
+    "category": "Consumer",
+    "subcategory": "Food Safety",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "How to complain about food safety?", "a": "File complaint with Food Safety Officer or through FSSAI portal."},
+      {"q": "What is FSSAI license?", "a": "Mandatory license for food businesses from manufacturing to retail."},
+      {"q": "Can I get compensation for food poisoning?", "a": "Yes, file complaint in consumer court for compensation and medical expenses."}
+    ]
+  },
+  {
+    "id": "sc_st_prevention_act",
+    "keywords": ["caste discrimination", "atrocity", "scheduled caste", "scheduled tribe", "untouchability"],
+    "title": "SC/ST Prevention of Atrocities Act 1989",
+    "act": "Scheduled Castes and Scheduled Tribes (Prevention of Atrocities) Act, 1989",
+    "summary": "Prevents atrocities against Scheduled Castes and Scheduled Tribes and provides for special courts and enhanced punishments.",
+    "detailed_description": "The Act defines various forms of atrocities against SC/ST communities and prescribes stringent punishments. It also provides for rehabilitation and compensation to victims.",
+    "punishment": "Imprisonment 6 months to 5 years + fine. Serious offenses: life imprisonment. Compensation to victims mandatory",
+    "category": "Criminal",
+    "subcategory": "Social Justice",
+    "state": "All India",
+    "language": "en",
+    "bailable": false,
+    "cognizable": true,
+    "faqs": [
+      {"q": "What constitutes atrocity under this Act?", "a": "Assault, sexual exploitation, economic boycott, social boycott, destruction of property based on caste."},
+      {"q": "Is this a non-bailable offense?", "a": "Yes, most offenses under this Act are non-bailable."},
+      {"q": "Can victim get compensation?", "a": "Yes, immediate relief and compensation as per state government schemes."}
+    ]
+  },
+  {
+    "id": "immigration_passport",
+    "keywords": ["passport", "visa", "immigration", "foreign travel", "passport renewal"],
+    "title": "Passport Act 1967",
+    "act": "Passport Act, 1967",
+    "summary": "Regulates issuance of passports and travel documents for Indian citizens traveling abroad.",
+    "detailed_description": "The Act provides for issuance, renewal, and revocation of passports. It also covers penalties for passport-related offenses and unauthorized travel.",
+    "punishment": "Traveling without passport: imprisonment up to 2 years + fine. Fake passport: 5 years imprisonment + fine",
+    "category": "Administrative",
+    "subcategory": "Immigration",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "How long does passport processing take?", "a": "Normal processing: 30-45 days. Tatkal: 1-3 days with additional fees."},
+      {"q": "Can passport be renewed before expiry?", "a": "Yes, can be renewed within 1 year before expiry or after expiry."},
+      {"q": "What if passport is lost abroad?", "a": "Report to local police and Indian embassy for emergency certificate or new passport."}
+    ]
+  },
+  {
+    "id": "companies_act_2013",
+    "keywords": ["company registration", "corporate governance", "director duties", "company compliance", "business registration"],
+    "title": "Companies Act 2013",
+    "act": "Companies Act, 2013",
+    "summary": "Regulates incorporation, functioning, and winding up of companies in India with provisions for corporate governance and compliance.",
+    "detailed_description": "The Act provides comprehensive framework for company operations including incorporation, board governance, financial reporting, audit, and corporate social responsibility.",
+    "punishment": "Non-compliance penalties: ₹10,000 to ₹5 lakhs + imprisonment up to 3 years. Serious violations: higher penalties",
+    "category": "Commercial",
+    "subcategory": "Corporate Law",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "What is minimum capital for private company?", "a": "No minimum capital required for private company registration."},
+      {"q": "How many directors required?", "a": "Minimum 2 directors for private company, 3 for public company."},
+      {"q": "What is annual compliance?", "a": "File annual returns, financial statements, and board resolutions with ROC."}
+    ]
+  },
+  {
+    "id": "electricity_act_2003",
+    "keywords": ["electricity theft", "power cut", "electricity bill", "load shedding", "power supply"],
+    "title": "Electricity Act 2003",
+    "act": "Electricity Act, 2003",
+    "summary": "Regulates electricity generation, transmission, distribution, and trading with provisions for consumer protection and theft prevention.",
+    "detailed_description": "The Act provides framework for electricity sector including licensing, consumer rights, dispute resolution, and penalties for electricity theft.",
+    "punishment": "Electricity theft: imprisonment up to 3 years + fine. Commercial theft: up to 5 years + fine up to ₹10 lakhs",
+    "category": "Consumer",
+    "subcategory": "Utilities",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "How to complain about power cuts?", "a": "File complaint with electricity board or State Electricity Regulatory Commission."},
+      {"q": "What is the penalty for meter tampering?", "a": "Imprisonment up to 3 years + fine + recovery of stolen electricity."},
+      {"q": "Can I get compensation for power supply failures?", "a": "Yes, as per state regulations for prolonged outages affecting business."}
+    ]
   }
 ]

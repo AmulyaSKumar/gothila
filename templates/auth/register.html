@@ -46,6 +46,19 @@
             box-shadow: 0 0 0 0.2rem rgba(0,0,0,0.1);
             background: white;
         }
+        .form-select {
+            border: 1px solid #333333;
+            border-radius: 2px;
+            padding: 0.75rem;
+            background: white;
+            color: #333333;
+            font-family: 'Georgia', serif;
+        }
+        .form-select:focus {
+            border-color: #000000;
+            box-shadow: 0 0 0 0.2rem rgba(0,0,0,0.1);
+            background: white;
+        }
         .btn-register {
             background: #000000;
             border: 1px solid #000000;
@@ -63,6 +76,13 @@
             color: white;
         }
         .role-selection {
+            background: #f0f0f0;
+            border: 1px solid #d0d0d0;
+            border-radius: 2px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .lawyer-fields {
             background: #f0f0f0;
             border: 1px solid #d0d0d0;
             border-radius: 2px;
@@ -127,7 +147,7 @@
                             {% endif %}
                         {% endwith %}
 
-                        <form method="POST">
+                        <form method="POST" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
@@ -245,6 +265,91 @@
                                 </div>
                             </div>
                             
+                            <!-- Lawyer fields moved inside the form -->
+                            <div id="lawyer-fields" class="lawyer-fields" style="display: none;">
+                                <h4 class="mt-2 mb-3">Lawyer Information</h4>
+                                
+                                <div class="mb-3">
+                                    <label for="specializations" class="form-label">
+                                        <i class="fas fa-briefcase me-2"></i>Areas of Expertise
+                                    </label>
+                                    <select class="form-select" id="specializations" name="specializations" multiple>
+                                        <option value="Criminal Law">Criminal Law</option>
+                                        <option value="Civil Law">Civil Law</option>
+                                        <option value="Family Law">Family Law</option>
+                                        <option value="Corporate Law">Corporate Law</option>
+                                        <option value="Property Law">Property Law</option>
+                                        <option value="Consumer Law">Consumer Law</option>
+                                        <option value="Labor Law">Labor Law</option>
+                                        <option value="Tax Law">Tax Law</option>
+                                        <option value="Constitutional Law">Constitutional Law</option>
+                                    </select>
+                                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="experience_years" class="form-label">
+                                                <i class="fas fa-history me-2"></i>Years of Experience
+                                            </label>
+                                            <input type="number" class="form-control" id="experience_years" name="experience_years" min="0" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="bar_council_id" class="form-label">
+                                                <i class="fas fa-id-card me-2"></i>Bar Council ID
+                                            </label>
+                                            <input type="text" class="form-control" id="bar_council_id" name="bar_council_id" placeholder="Your Bar Council ID">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="languages" class="form-label">
+                                        <i class="fas fa-language me-2"></i>Languages Spoken
+                                    </label>
+                                    <select class="form-select" id="languages" name="languages" multiple>
+                                        <option value="English">English</option>
+                                        <option value="Hindi">Hindi</option>
+                                        <option value="Bengali">Bengali</option>
+                                        <option value="Tamil">Tamil</option>
+                                        <option value="Telugu">Telugu</option>
+                                        <option value="Marathi">Marathi</option>
+                                        <option value="Gujarati">Gujarati</option>
+                                        <option value="Kannada">Kannada</option>
+                                        <option value="Malayalam">Malayalam</option>
+                                        <option value="Punjabi">Punjabi</option>
+                                    </select>
+                                    <small class="text-muted">Hold Ctrl/Cmd to select multiple</small>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="consultation_fee" class="form-label">
+                                        <i class="fas fa-rupee-sign me-2"></i>Consultation Fee
+                                    </label>
+                                    <input type="number" class="form-control" id="consultation_fee" name="consultation_fee" placeholder="Fee per consultation">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="bio" class="form-label">
+                                        <i class="fas fa-user-circle me-2"></i>Professional Bio
+                                    </label>
+                                    <textarea class="form-control" id="bio" name="bio" rows="3" placeholder="Brief description of your professional background"></textarea>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="verification_document" class="form-label">
+                                        <i class="fas fa-file-pdf me-2"></i>Verification Document
+                                    </label>
+                                    <input type="file" class="form-control" id="verification_document" name="verification_document">
+                                    <small class="text-muted">Upload your Bar Council certificate or other proof</small>
+                                </div>
+                                
+                                
+                            </div>
+                            
                             <div class="d-grid mb-3">
                                 <button type="submit" class="btn btn-success btn-register">
                                     <i class="fas fa-user-plus me-2"></i>Create Account
@@ -270,6 +375,66 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JavaScript for toggling lawyer fields -->
+    <script>
+        // Show/hide lawyer fields based on role selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleUser = document.getElementById('role_user');
+            const roleLawyer = document.getElementById('role_lawyer');
+            const lawyerFields = document.getElementById('lawyer-fields');
+            
+            function toggleLawyerFields() {
+                if (roleLawyer.checked) {
+                    lawyerFields.style.display = 'block';
+                } else {
+                    lawyerFields.style.display = 'none';
+                }
+            }
+            
+            roleUser.addEventListener('change', toggleLawyerFields);
+            roleLawyer.addEventListener('change', toggleLawyerFields);
+            
+            // Initialize map for lawyer location
+            if (roleLawyer.checked) {
+                lawyerFields.style.display = 'block';
+            }
+        });
+        
+        // Initialize map (you'll need to add Google Maps API)
+        function initMap() {
+            const defaultLocation = { lat: 28.6139, lng: 77.2090 }; // New Delhi
+            const map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: defaultLocation
+            });
+            
+            let marker = new google.maps.Marker({
+                position: defaultLocation,
+                map: map,
+                draggable: true
+            });
+            
+            // Update hidden fields with marker position
+            function updateLocation(position) {
+                document.getElementById('latitude').value = position.lat();
+                document.getElementById('longitude').value = position.lng();
+            }
+            
+            // Set initial values
+            updateLocation(defaultLocation);
+            
+            // Update on marker drag
+            marker.addListener('dragend', function() {
+                updateLocation(marker.getPosition());
+            });
+            
+            // Update on map click
+            map.addListener('click', function(e) {
+                marker.setPosition(e.latLng);
+                updateLocation(e.latLng);
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 </body>
 </html>

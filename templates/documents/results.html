@@ -1,171 +1,140 @@
 {% extends "base_nyaya.html" %}
 
-{% block title %}Document Analysis Results - Nyaya{% endblock %}
+{% block title %}Document Analysis Results{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="fw-bold">Document Analysis Results</h1>
-        <a href="{{ url_for('upload_file') }}" class="btn btn-outline-primary">
-            <i class="fas fa-upload"></i> Analyze Another Document
-        </a>
-    </div>
-    
-    <!-- Document Info -->
-    <div class="card shadow mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-file-alt"></i> {{ document.original_filename }}</h5>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-3">
-                    <strong>File Size:</strong> {{ "%.2f"|format(document.file_size / 1024) }} KB
-                </div>
-                <div class="col-md-3">
-                    <strong>File Type:</strong> {{ document.file_type.upper() }}
-                </div>
-                <div class="col-md-3">
-                    <strong>Analyzed:</strong> {{ document.upload_date.strftime('%B %d, %Y at %I:%M %p') }}
-                </div>
-                <div class="col-md-3">
-                    <strong>Compliance Score:</strong>
-                    <span class="compliance-score {% if document.compliance_score >= 80 %}score-excellent{% elif document.compliance_score >= 60 %}score-good{% else %}score-poor{% endif %}">
-                        {{ document.compliance_score|round|int }}%
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- AI Summary -->
-    {% if summary %}
-    <div class="card shadow mb-4">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-robot text-primary"></i> AI-Generated Summary</h5>
-        </div>
-        <div class="card-body">
-            {% if summary.executive_summary %}
-                <h6>Executive Summary</h6>
-                <p>{{ summary.executive_summary }}</p>
-            {% endif %}
-            
-            <div class="row">
-                {% if summary.document_purpose %}
-                <div class="col-md-6">
-                    <h6>Document Purpose</h6>
-                    <p>{{ summary.document_purpose }}</p>
-                </div>
-                {% endif %}
-                
-                {% if summary.key_parties %}
-                <div class="col-md-6">
-                    <h6>Key Parties</h6>
-                    <p>{{ summary.key_parties }}</p>
-                </div>
-                {% endif %}
-            </div>
-            
-            {% if summary.main_obligations %}
-            <h6>Main Obligations</h6>
-            <p>{{ summary.main_obligations }}</p>
-            {% endif %}
-            
-            {% if summary.risks_and_benefits %}
-            <h6>Risks and Benefits</h6>
-            <p>{{ summary.risks_and_benefits }}</p>
-            {% endif %}
-            
-            {% if summary.next_steps %}
-            <h6>Recommended Next Steps</h6>
-            <p>{{ summary.next_steps }}</p>
-            {% endif %}
-        </div>
-    </div>
-    {% endif %}
-    
-    <!-- Analysis Results -->
+<div class="container py-4">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="card shadow">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-search"></i> Detailed Analysis</h5>
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-file-alt me-2"></i>
+                        Document Analysis Results
+                    </h4>
+                    <a href="{{ url_for('upload_file') }}" class="btn btn-light">
+                        <i class="fas fa-upload me-2"></i>
+                        Analyze Another Document
+                    </a>
                 </div>
+                
                 <div class="card-body">
-                    {% if analysis.issues %}
-                        {% for issue in analysis.issues %}
-                        <div class="alert alert-{% if issue.severity == 'critical' %}danger{% elif issue.severity == 'high' %}warning{% elif issue.severity == 'medium' %}info{% else %}secondary{% endif %} mb-3">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h6 class="alert-heading">
-                                        <span class="badge bg-{% if issue.severity == 'critical' %}danger{% elif issue.severity == 'high' %}warning{% elif issue.severity == 'medium' %}info{% else %}secondary{% endif %} me-2">
-                                            {{ issue.severity|title }}
-                                        </span>
-                                        {{ issue.category|title }} Issue
-                                    </h6>
-                                    <p class="mb-2">{{ issue.description }}</p>
-                                    {% if issue.suggestion %}
-                                        <p class="mb-0"><strong>Suggestion:</strong> {{ issue.suggestion }}</p>
-                                    {% endif %}
+                    <!-- Document Info -->
+                    <div class="mb-4">
+                        <h5>Document Information</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th style="width: 200px;">File Name</th>
+                                    <td>{{ document.original_filename }}</td>
+                                </tr>
+                                <tr>
+                                    <th>File Type</th>
+                                    <td>{{ document.file_type.upper() }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Upload Date</th>
+                                    <td>{{ document.upload_date }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Document Stats</th>
+                                    <td>
+                                        {{ analysis.stats.word_count }} words |
+                                        {{ analysis.stats.character_count }} characters |
+                                        {{ analysis.stats.paragraph_count }} paragraphs
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    {% if not analysis.is_legal %}
+                        <!-- Non-Legal Document -->
+                        <div class="alert alert-info">
+                            <h5><i class="fas fa-info-circle me-2"></i>Notice</h5>
+                            <p>{{ analysis.message }}</p>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5>Document Summary</h5>
+                            <div class="card">
+                                <div class="card-body">
+                                    {{ analysis.summary }}
                                 </div>
                             </div>
                         </div>
-                        {% endfor %}
                     {% else %}
-                        <div class="alert alert-success">
-                            <h6 class="alert-heading"><i class="fas fa-check-circle"></i> No Major Issues Found</h6>
-                            <p class="mb-0">The document appears to be well-structured with no significant compliance issues detected.</p>
+                        <!-- Legal Document Analysis -->
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">Compliance Score</h5>
+                                        <div class="display-4 mb-2 {{ 'text-success' if analysis.analysis.compliance_score >= 80 else 'text-warning' if analysis.analysis.compliance_score >= 60 else 'text-danger' }}">
+                                            {{ "%.1f"|format(analysis.analysis.compliance_score) }}%
                         </div>
-                    {% endif %}
+                                        <p class="text-muted">Based on legal requirements analysis</p>
                 </div>
             </div>
         </div>
-        
-        <div class="col-lg-4">
-            <div class="card shadow mb-3">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Quick Stats</h5>
-                </div>
+                            <div class="col-md-8">
+                                <div class="card h-100">
                 <div class="card-body">
-                    <div class="text-center mb-3">
-                        <div class="compliance-score {% if document.compliance_score >= 80 %}score-excellent{% elif document.compliance_score >= 60 %}score-good{% else %}score-poor{% endif %}">
-                            {{ document.compliance_score|round|int }}%
-                        </div>
-                        <small class="text-muted">Compliance Score</small>
-                    </div>
-                    
-                    <hr>
-                    
-                    <div class="row text-center">
-                        <div class="col-6">
-                            <h5 class="text-danger">{{ document.issues_found }}</h5>
-                            <small>Issues Found</small>
-                        </div>
-                        <div class="col-6">
-                            <h5 class="text-info">{{ analysis.word_count or 'N/A' }}</h5>
-                            <small>Words</small>
+                                        <h5 class="card-title">Document Summary</h5>
+                                        <p>{{ analysis.analysis.summary }}</p>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="card shadow">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-tools"></i> Next Steps</h5>
+                        <!-- Issues Found -->
+                        {% if analysis.analysis.issues %}
+                        <div class="mt-4">
+                            <h5>Issues Found</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Issue Type</th>
+                                            <th>Description</th>
+                                            <th>Severity</th>
+                                            <th>Suggestion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for issue in analysis.analysis.issues %}
+                                        <tr>
+                                            <td>{{ issue.type }}</td>
+                                            <td>{{ issue.description }}</td>
+                                            <td>
+                                                <span class="badge {{ 'bg-danger' if issue.severity == 'high' else 'bg-warning' if issue.severity == 'medium' else 'bg-info' }}">
+                                                    {{ issue.severity }}
+                                                </span>
+                                            </td>
+                                            <td>{{ issue.suggestion }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                 </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <a href="{{ url_for('chat') }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-robot"></i> Ask AI About This Document
-                        </a>
-                        <a href="{{ url_for('find_lawyer') }}" class="btn btn-success btn-sm">
-                            <i class="fas fa-user-tie"></i> Find a Lawyer
-                        </a>
-                        {% if current_user.is_authenticated %}
-                        <a href="{{ url_for('case_notes') }}" class="btn btn-info btn-sm">
-                            <i class="fas fa-sticky-note"></i> Save to Notes
-                        </a>
                         {% endif %}
+
+                        <!-- Recommendations -->
+                        {% if analysis.analysis.recommendations %}
+                        <div class="mt-4">
+                            <h5>Recommendations</h5>
+                            <ul class="list-group">
+                                {% for rec in analysis.analysis.recommendations %}
+                                <li class="list-group-item">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    {{ rec }}
+                                </li>
+                                {% endfor %}
+                            </ul>
                     </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
         </div>

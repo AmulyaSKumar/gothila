@@ -21,6 +21,7 @@
                                 Type: {{ document.file_type.upper() }}
                             </p>
                         </div>
+                        {% if analysis.is_legal %}
                         <div class="col-md-4 text-md-end">
                             <div class="compliance-badge">
                                 <div class="score-circle">
@@ -29,13 +30,58 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Analysis Summary -->
+    {% if not analysis.is_legal %}
+    <!-- Non-Legal Document Notice -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h5 class="alert-heading">
+                    <i class="fas fa-info-circle me-2"></i>Notice
+                </h5>
+                <p class="mb-0">{{ analysis.message }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Basic Document Analysis -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-file-alt me-2"></i>Document Overview
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6>Document Statistics</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-font me-2"></i>Words: {{ analysis.stats.word_count }}</li>
+                                <li><i class="fas fa-paragraph me-2"></i>Paragraphs: {{ analysis.stats.paragraph_count }}</li>
+                                <li><i class="fas fa-text-width me-2"></i>Characters: {{ analysis.stats.character_count }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h6>Document Summary</h6>
+                        <div class="alert alert-light border">
+                            <pre class="mb-0 text-charcoal">{{ analysis.summary }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Legal Document Analysis -->
     <div class="row mb-4">
         <div class="col-md-8">
             <div class="card h-100">
@@ -48,13 +94,13 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="stat-item">
-                                <div class="stat-number text-indigo">{{ analysis.word_count or 0 }}</div>
+                                <div class="stat-number text-indigo">{{ analysis.stats.word_count }}</div>
                                 <div class="stat-label">Words</div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="stat-item">
-                                <div class="stat-number text-indigo">{{ document.issues_found or 0 }}</div>
+                                <div class="stat-number text-indigo">{{ analysis.analysis.issues|length or 0 }}</div>
                                 <div class="stat-label">Issues Found</div>
                             </div>
                         </div>
@@ -62,14 +108,14 @@
                     
                     <div class="mb-3">
                         <h6 class="text-indigo">Document Type</h6>
-                        <span class="badge bg-secondary fs-6">{{ analysis.document_type.title() if analysis.document_type else 'General' }}</span>
+                        <span class="badge bg-secondary fs-6">{{ analysis.analysis.document_type.title() if analysis.analysis.document_type else 'General' }}</span>
                     </div>
                     
-                    {% if analysis.legal_areas %}
+                    {% if analysis.analysis.legal_areas %}
                     <div class="mb-3">
                         <h6 class="text-indigo">Legal Areas Identified</h6>
                         <div class="d-flex flex-wrap gap-2">
-                            {% for area in analysis.legal_areas %}
+                            {% for area in analysis.analysis.legal_areas %}
                                 <span class="badge bg-info">{{ area }}</span>
                             {% endfor %}
                         </div>
@@ -78,7 +124,7 @@
                     
                     <div class="alert alert-light border">
                         <h6 class="text-indigo mb-2">Summary</h6>
-                        <pre class="mb-0 text-charcoal">{{ analysis.summary or 'No summary available' }}</pre>
+                        <pre class="mb-0 text-charcoal">{{ analysis.analysis.summary or 'No summary available' }}</pre>
                     </div>
                 </div>
             </div>
@@ -92,9 +138,9 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    {% if analysis.recommendations %}
+                    {% if analysis.analysis.recommendations %}
                         <ul class="list-unstyled">
-                            {% for recommendation in analysis.recommendations %}
+                            {% for recommendation in analysis.analysis.recommendations %}
                                 <li class="mb-3">
                                     <i class="fas fa-check-circle text-success me-2"></i>
                                     <small>{{ recommendation }}</small>
@@ -110,14 +156,14 @@
     </div>
 
     <!-- Issues Analysis -->
-    {% if analysis.issues %}
+    {% if analysis.analysis.issues %}
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
                 <div class="card-header bg-warning text-dark">
                     <h5 class="mb-0">
                         <i class="fas fa-exclamation-triangle me-2"></i>
-                        Issues Found ({{ analysis.issues|length }})
+                        Issues Found ({{ analysis.analysis.issues|length }})
                     </h5>
                 </div>
                 <div class="card-body">
@@ -132,7 +178,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for issue in analysis.issues %}
+                                {% for issue in analysis.analysis.issues %}
                                 <tr>
                                     <td>
                                         <span class="badge bg-{{ 'danger' if issue.severity == 'critical' else 'warning' if issue.severity == 'high' else 'info' if issue.severity == 'medium' else 'secondary' }}">
@@ -175,14 +221,14 @@
                         <div class="col-md-6">
                             <h6 class="text-indigo mb-3">Overall Compliance</h6>
                             <div class="progress mb-3" style="height: 25px;">
-                                <div class="progress-bar bg-{{ 'success' if document.compliance_score >= 80 else 'warning' if document.compliance_score >= 60 else 'danger' }}" 
-                                     style="width: {{ document.compliance_score or 0 }}%">
-                                    {{ "%.1f"|format(document.compliance_score or 0) }}%
+                                <div class="progress-bar bg-{{ 'success' if analysis.analysis.compliance_score >= 80 else 'warning' if analysis.analysis.compliance_score >= 60 else 'danger' }}" 
+                                     style="width: {{ analysis.analysis.compliance_score or 0 }}%">
+                                    {{ "%.1f"|format(analysis.analysis.compliance_score or 0) }}%
                                 </div>
                             </div>
                             
                             <div class="compliance-interpretation">
-                                {% set score = document.compliance_score or 0 %}
+                                {% set score = analysis.analysis.compliance_score or 0 %}
                                 {% if score >= 80 %}
                                     <div class="alert alert-success">
                                         <i class="fas fa-check-circle me-2"></i>
@@ -204,10 +250,10 @@
                         
                         <div class="col-md-6">
                             <h6 class="text-indigo mb-3">Issue Severity Distribution</h6>
-                            {% set critical_count = analysis.issues | selectattr('severity', 'equalto', 'critical') | list | length %}
-                            {% set high_count = analysis.issues | selectattr('severity', 'equalto', 'high') | list | length %}
-                            {% set medium_count = analysis.issues | selectattr('severity', 'equalto', 'medium') | list | length %}
-                            {% set low_count = analysis.issues | selectattr('severity', 'equalto', 'low') | list | length %}
+                            {% set critical_count = analysis.analysis.issues | selectattr('severity', 'equalto', 'critical') | list | length %}
+                            {% set high_count = analysis.analysis.issues | selectattr('severity', 'equalto', 'high') | list | length %}
+                            {% set medium_count = analysis.analysis.issues | selectattr('severity', 'equalto', 'medium') | list | length %}
+                            {% set low_count = analysis.analysis.issues | selectattr('severity', 'equalto', 'low') | list | length %}
                             
                             <div class="severity-stats">
                                 {% if critical_count > 0 %}
@@ -238,7 +284,7 @@
                                 </div>
                                 {% endif %}
                                 
-                                {% if not analysis.issues %}
+                                {% if not analysis.analysis.issues %}
                                 <div class="text-center text-muted">
                                     <i class="fas fa-check-circle fa-2x mb-2"></i>
                                     <p>No issues found!</p>
@@ -251,6 +297,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
     <!-- Action Buttons -->
     <div class="row">

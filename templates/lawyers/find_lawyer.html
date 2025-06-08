@@ -102,7 +102,7 @@
                                     <i class="fas fa-eye"></i> View Profile
                                 </a>
                                 {% if current_user.is_authenticated and current_user.role == 'user' %}
-                                    <button class="btn btn-primary btn-sm" onclick="connectWithLawyer({{ lawyer.id }})">
+                                    <button class="btn btn-primary btn-sm" onclick="connectWithLawyer('{{ lawyer.id }}')">
                                         <i class="fas fa-handshake"></i> Connect
                                     </button>
                                 {% endif %}
@@ -142,8 +142,8 @@
 function connectWithLawyer(lawyerId) {
     // Simple connection request - in a real app, this would open a modal or form
     if (confirm('Would you like to send a connection request to this lawyer?')) {
-        // Redirect to a connection form or handle via AJAX
-        window.location.href = `/connect-lawyer/${lawyerId}`;
+        // Redirect to the contact-lawyer route instead of connect-lawyer
+        window.location.href = `/contact-lawyer/${lawyerId}`;
     }
 }
 </script>

@@ -141,7 +141,7 @@
                         <a class="nav-link active" href="{{ url_for('dashboard') }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('upload_page') }}">Analyze Document</a>
+                        <a class="nav-link" href="{{ url_for('upload_file') }}">Analyze Document</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('legal_forms') }}">Generate Documents</a>
@@ -240,7 +240,7 @@
                                 </div>
                                 <h5>Analyze Document</h5>
                                 <p class="text-muted">Upload and analyze legal documents for compliance</p>
-                                <a href="{{ url_for('upload_page') }}" class="btn btn-primary">Upload Document</a>
+                                <a href="{{ url_for('upload_file') }}" class="btn btn-primary">Upload Document</a>
                             </div>
                         </div>
                     </div>
@@ -332,7 +332,7 @@
                             <div class="text-center py-4">
                                 <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
                                 <p class="text-muted">No documents uploaded yet. Start by analyzing your first document!</p>
-                                <a href="{{ url_for('upload_page') }}" class="btn btn-primary">Upload Document</a>
+                                <a href="{{ url_for('upload_file') }}" class="btn btn-primary">Upload Document</a>
                             </div>
                         {% endif %}
                     </div>

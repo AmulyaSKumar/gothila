@@ -1,0 +1,132 @@
+{% extends "base_nyaya.html" %}
+
+{% block title %}Conversation - Nyaya{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <!-- Chat Area -->
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-comments"></i> 
+                        Conversation with {{ other_party.full_name }}
+                    </h5>
+                    <span class="badge bg-{% if connection.status == 'active' %}success{% elif connection.status == 'pending' %}warning{% else %}secondary{% endif %}">
+                        {{ connection.status|title }}
+                    </span>
+                </div>
+                
+                <div class="card-body" style="height: 400px; overflow-y: auto;" id="chat-messages">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="message-bubble {% if message.sender_type == current_user.role %}outgoing{% else %}incoming{% endif %} mb-3">
+                                <div class="message-content p-3 rounded {% if message.sender_type == current_user.role %}bg-primary text-white{% else %}bg-light{% endif %}">
+                                    {{ message.message }}
+                                    {% if message.attachment_path %}
+                                    <div class="mt-2">
+                                        <a href="{{ url_for('static', filename=message.attachment_path) }}" target="_blank" class="btn btn-sm {% if message.sender_type == current_user.role %}btn-light{% else %}btn-primary{% endif %}">
+                                            <i class="fas fa-paperclip"></i> View Attachment
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="message-meta text-muted small mt-1">
+                                    {{ message.timestamp|datetime }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-comments" style="font-size: 3rem;"></i>
+                            <p class="mt-3">No messages yet. Start the conversation!</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-footer">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <textarea class="form-control" name="message" rows="3" placeholder="Type your message..." required></textarea>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="file-upload">
+                                <label for="attachment" class="btn btn-outline-secondary mb-0">
+                                    <i class="fas fa-paperclip"></i> Attach File
+                                </label>
+                                <input type="file" id="attachment" name="attachment" class="d-none">
+                                <span id="file-name" class="ms-2 small text-muted"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Case Info -->
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Case Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Description:</strong></p>
+                    <p>{{ connection.case_description }}</p>
+                    
+                    <p><strong>Urgency:</strong></p>
+                    <span class="badge bg-{% if connection.urgency == 'high' %}danger{% elif connection.urgency == 'normal' %}warning{% else %}info{% endif %}">
+                        {{ connection.urgency|title }}
+                    </span>
+                    
+                    <p class="mt-3"><strong>Started:</strong></p>
+                    <p>{{ connection.connection_date|datetime }}</p>
+                </div>
+            </div>
+            
+            <div class="card shadow">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">{{ other_party.full_name }}</h5>
+                </div>
+                <div class="card-body">
+                    {% if current_user.role == 'user' %}
+                        <!-- Lawyer Info -->
+                        <p><i class="fas fa-gavel me-2"></i> {{ other_party.specializations|join(', ') }}</p>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> {{ other_party.location }}</p>
+                        <p><i class="fas fa-star me-2"></i> {{ other_party.rating }} ({{ other_party.total_reviews }} reviews)</p>
+                    {% else %}
+                        <!-- User Info -->
+                        <p><i class="fas fa-envelope me-2"></i> {{ other_party.email }}</p>
+                        <p><i class="fas fa-phone me-2"></i> {{ other_party.phone }}</p>
+                    {% endif %}
+                    
+                    <div class="d-grid gap-2 mt-3">
+                        <a href="{% if current_user.role == 'user' %}{{ url_for('my_lawyers') }}{% else %}{{ url_for('lawyer_dashboard') }}{% endif %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to {% if current_user.role == 'user' %}My Lawyers{% else %}Dashboard{% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Scroll to bottom of chat messages
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatMessages = document.getElementById('chat-messages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Show selected file name
+        document.getElementById('attachment').addEventListener('change', function() {
+            const fileName = this.files[0] ? this.files[0].name : '';
+            document.getElementById('file-name').textContent = fileName;
+        });
+    });
+</script>
+{% endblock %}

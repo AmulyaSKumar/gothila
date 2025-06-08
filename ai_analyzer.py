@@ -434,41 +434,71 @@ Provide response in JSON format:
                 'next_steps': 'Consult with legal counsel'
             }
     
-    def answer_legal_question(self, question: str, document_text: str = "") -> str:
-        """Answer legal questions about documents or general Indian law"""
+    def is_legal_question(self, question: str) -> bool:
+        """Check if the question is related to legal matters"""
+        legal_keywords = [
+            'law', 'legal', 'rights', 'court', 'judge', 'lawyer', 'attorney',
+            'case', 'lawsuit', 'sue', 'plaintiff', 'defendant', 'police',
+            'fir', 'complaint', 'petition', 'appeal', 'bail', 'arrest',
+            'marriage', 'divorce', 'custody', 'property', 'tenant', 'landlord',
+            'company', 'business', 'tax', 'gst', 'contract', 'agreement',
+            'crime', 'criminal', 'theft', 'fraud', 'assault', 'damages',
+            'compensation', 'insurance', 'accident', 'injury', 'death',
+            'will', 'inheritance', 'property', 'deed', 'sale', 'purchase'
+        ]
+        
+        # Convert to lowercase for case-insensitive matching
+        question_lower = question.lower()
+        
+        # Check if any legal keyword is present
+        return any(keyword in question_lower for keyword in legal_keywords)
+
+    def answer_legal_question(self, question: str) -> str:
+        """Generate a concise and well-formatted response to legal questions"""
         try:
-            context = f"\nDocument context:\n{document_text[:15000]}" if document_text else ""
+            # Check if it's a legal question
+            if not self.is_legal_question(question):
+                return "I can only assist with legal questions. Please ask about laws, rights, procedures, or other legal matters."
+
+            # Generate response using Gemini
+            prompt = f"""You are a legal assistant. Answer this question briefly and clearly:
+            Question: {question}
             
-            prompt = f"""
-You are a legal AI assistant specializing in Indian law. Answer this legal question clearly and accurately.
-
-Important guidelines:
-- Focus on Indian law and regulations
-- Provide practical, actionable advice
-- Mention when legal counsel is recommended
-- Be clear about limitations and when professional help is needed
-- Use simple language that non-lawyers can understand
-
-Question: {question}
-{context}
-
-Provide a clear, helpful answer that includes:
-1. Direct answer to the question
-2. Relevant Indian law references
-3. Practical next steps
-4. When to consult a lawyer
-"""
+            Rules:
+            1. Start with a one-line direct answer
+            2. List 3-4 key points using bullet points
+            3. Keep entire response under 100 words
+            4. Use simple, clear language
+            5. Add a brief note if there's an important caution
+            
+            Format:
+            Answer: [one-line answer]
+            
+            Key Points:
+            • [point 1]
+            • [point 2]
+            • [point 3]
+            
+            Note: [if needed]"""
 
             response = self.model.generate_content(
                 prompt,
                 generation_config=genai.GenerationConfig(
-                    temperature=0.3,
-                    max_output_tokens=1000
+                    temperature=0.1,
+                    max_output_tokens=200,
+                    top_k=1
                 )
             )
             
-            return response.text
+            formatted_response = response.text.strip()
+
+            # Add disclaimer for sensitive topics
+            sensitive_keywords = ['arrest', 'criminal', 'death', 'assault', 'bail', 'fir', 'police']
+            if any(word in question.lower() for word in sensitive_keywords):
+                formatted_response += "\n\nImportant: This is general information. Please consult a legal professional."
+
+            return formatted_response
             
         except Exception as e:
-            self.logger.error(f"Legal question answering failed: {str(e)}")
-            return "I'm unable to answer your question right now. Please consult with a qualified legal professional for assistance."
+            self.logger.error(f"Error generating response: {str(e)}")
+            return "I apologize, but I'm having trouble processing your question. Please try again."

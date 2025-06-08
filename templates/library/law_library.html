@@ -23,13 +23,9 @@
                             <!-- Search Box -->
                             <div class="col-md-7">
                                 <label for="search" class="form-label h4"   >Search Legal Topics</label>
-                                <input type="text" class="form-control form-control-lg" id="search" name="q" style="width: 1200px;"
-                                       value="{{ query }}" placeholder="Try: bike accident, property dispute, consumer rights...">
-                            </div>
-                            
-                            
-                           
-                        
+                                <input type="text" class="form-control form-control-lg" id="search" name="query" style="width: 1200px;"
+                                       value="{{ current_filters.query }}" placeholder="Try: bike accident, property dispute, consumer rights...">
+                            </div>                       
                         <div class="row mt-3">
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary btn-lg me-2">
@@ -49,13 +45,13 @@
         <div class="col-12">
             <h3 class="mb-3">Popular Legal Topics</h3>
             <div class="d-flex flex-wrap gap-2 mb-4">
-                <a href="?q=bike accident" class="btn btn-outline-primary btn-sm"> Bike Accident</a>
-                <a href="?q=property dispute" class="btn btn-outline-primary btn-sm"> Property Dispute</a>
-                <a href="?q=consumer rights" class="btn btn-outline-primary btn-sm"> Consumer Rights</a>
-                <a href="?q=domestic violence" class="btn btn-outline-primary btn-sm"> Domestic Violence</a>
-                <a href="?q=employment rights" class="btn btn-outline-primary btn-sm"> Job Rights</a>
-                <a href="?q=police complaint" class="btn btn-outline-primary btn-sm"> Police Complaint</a>
-                <a href="?q=cybercrime" class="btn btn-outline-primary btn-sm"> Online Fraud</a>
+                <a href="?query=bike accident" class="btn btn-outline-primary btn-sm"> Bike Accident</a>
+                <a href="?query=property dispute" class="btn btn-outline-primary btn-sm"> Property Dispute</a>
+                <a href="?query=consumer rights" class="btn btn-outline-primary btn-sm"> Consumer Rights</a>
+                <a href="?query=domestic violence" class="btn btn-outline-primary btn-sm"> Domestic Violence</a>
+                <a href="?query=employment rights" class="btn btn-outline-primary btn-sm"> Job Rights</a>
+                <a href="?query=police complaint" class="btn btn-outline-primary btn-sm"> Police Complaint</a>
+                <a href="?query=cybercrime" class="btn btn-outline-primary btn-sm"> Online Fraud</a>
             </div>
         </div>
     </div>
@@ -83,27 +79,25 @@
                 <h3 class="mb-3">All Legal Topics</h3>
             {% endif %}
 
+            {% if law_cards|length == 0 %}
+                <!-- Alert content -->
+            {% endif %}
+
             <!-- Law Cards Grid -->
             <div class="row">
                 {% for law in law_cards %}
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100 shadow-sm hover-card">
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm hover-card h-100">
                         <div class="card-body">
-                            <!-- Category Badge -->
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <span class="badge bg-primary">{{ law.category }}</span>
-                                <small class="text-muted">{{ law.state }}</small>
+                            <h5 class="card-title">{{ law.title }}</h5>
+                            <p class="card-text">{{ law.summary }}</p>
+                            <div class="d-flex mb-2">
+                                <span class="badge bg-primary me-2">{{ law.category }}</span>
+                                <span class="badge bg-secondary">{{ law.state }}</span>
                             </div>
-                            
-                            <!-- Title and Summary -->
-                            <h5 class="card-title text-dark">{{ law.title }}</h5>
-                            <p class="card-text text-muted">{{ law.summary }}</p>
                         </div>
-                        
-                        <div class="card-footer bg-transparent">
-                            <a href="{{ url_for('law_detail', law_id=law.id) }}" class="btn btn-primary btn-sm">
-                                <i class="fas fa-book-open"></i> Read More
-                            </a>
+                        <div class="card-footer bg-white">
+                            <a href="{{ url_for('law_detail', law_id=law.id) }}" class="btn btn-sm btn-outline-primary">Read More</a>
                         </div>
                     </div>
                 </div>
@@ -153,16 +147,32 @@
 
 <script>
 // Auto-submit form when filters change
-document.getElementById('category').addEventListener('change', function() {
-    this.form.submit();
-});
+const categoryElement = document.getElementById('category');
+if (categoryElement) {
+    categoryElement.addEventListener('change', function() {
+        this.form.submit();
+    });
+}
 
-document.getElementById('state').addEventListener('change', function() {
-    this.form.submit();
-});
+const stateElement = document.getElementById('state');
+if (stateElement) {
+    stateElement.addEventListener('change', function() {
+        this.form.submit();
+    });
+}
 
 // Search suggestions
 const searchInput = document.getElementById('search');
+if (searchInput) {
+    searchInput.addEventListener('input', function() {
+        // Simple search enhancement - could be expanded with a proper autocomplete
+        const value = this.value.toLowerCase();
+        if (value.length > 2) {
+            // This could be enhanced with a dropdown of suggestions
+            console.log('Searching for:', value);
+        }
+    });
+}
 const suggestions = [
     'bike accident', 'car accident', 'property dispute', 'land dispute',
     'consumer rights', 'domestic violence', 'employment rights', 'salary issues',
