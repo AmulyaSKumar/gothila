@@ -1,0 +1,185 @@
+[
+  {
+    "id": "ipc_279",
+    "keywords": ["bike accident", "rash driving", "road accident", "negligent driving", "vehicle accident"],
+    "title": "Section 279 IPC – Rash Driving on Public Way",
+    "act": "Indian Penal Code, 1860",
+    "summary": "Whoever drives any vehicle on a public road in a rash or negligent manner can be punished with up to 6 months imprisonment or a fine of ₹1000.",
+    "detailed_description": "This section deals with rash or negligent driving that endangers human life or is likely to cause hurt or injury to any other person. It covers all types of vehicles including bikes, cars, trucks, etc.",
+    "punishment": "Imprisonment up to 6 months OR fine up to ₹1000 OR both",
+    "category": "Criminal",
+    "subcategory": "Road Safety",
+    "state": "All India",
+    "language": "en",
+    "bailable": true,
+    "cognizable": true,
+    "faqs": [
+      {"q": "Is rash driving a crime?", "a": "Yes, it is punishable under IPC Section 279 with up to 6 months imprisonment or ₹1000 fine."},
+      {"q": "Is this a bailable offense?", "a": "Yes, this is generally a bailable offense."},
+      {"q": "What constitutes rash driving?", "a": "Driving at excessive speed, overtaking dangerously, jumping signals, or any driving that endangers others."}
+    ]
+  },
+  {
+    "id": "ipc_304a",
+    "keywords": ["accidental death", "bike accident", "hit and run", "death by negligence", "causing death"],
+    "title": "Section 304A IPC – Causing Death by Negligence",
+    "act": "Indian Penal Code, 1860",
+    "summary": "Whoever causes death of any person by a rash or negligent act not amounting to culpable homicide shall be punished with up to 2 years imprisonment or fine.",
+    "detailed_description": "This section applies when someone's negligent or rash act results in death, but there was no intention to cause death or knowledge that the act would cause death.",
+    "punishment": "Imprisonment up to 2 years OR fine OR both",
+    "category": "Criminal",
+    "subcategory": "Road Safety",
+    "state": "All India",
+    "language": "en",
+    "bailable": true,
+    "cognizable": true,
+    "faqs": [
+      {"q": "What is the difference between murder and death by negligence?", "a": "Murder requires intention to kill, while death by negligence is unintentional but due to careless acts."},
+      {"q": "Can I get bail in 304A case?", "a": "Yes, Section 304A is generally bailable."}
+    ]
+  },
+  {
+    "id": "motor_vehicle_act_accident",
+    "keywords": ["motor vehicle accident", "bike insurance", "third party insurance", "accident compensation"],
+    "title": "Motor Vehicle Act 1988 - Accident Claims",
+    "act": "Motor Vehicle Act, 1988",
+    "summary": "Provides for compensation to accident victims and makes third-party insurance mandatory for all vehicles.",
+    "detailed_description": "The Act establishes Motor Accident Claims Tribunals (MACT) to decide compensation for accident victims. It makes third-party insurance compulsory and provides for no-fault liability for certain accidents.",
+    "punishment": "Driving without insurance: ₹2000 fine + vehicle seizure. Repeat offense: ₹4000 fine + 3 months imprisonment",
+    "category": "Civil",
+    "subcategory": "Road Safety",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "How to claim compensation for bike accident?", "a": "File claim petition in Motor Accident Claims Tribunal (MACT) within 6 months of accident."},
+      {"q": "Is third-party insurance mandatory?", "a": "Yes, it's mandatory for all motor vehicles including bikes."},
+      {"q": "What documents needed for accident claim?", "a": "FIR copy, medical bills, income proof, accident report, insurance policy details."}
+    ]
+  },
+  {
+    "id": "property_dispute_resolution",
+    "keywords": ["property dispute", "land dispute", "property ownership", "title dispute", "boundary dispute"],
+    "title": "Property Disputes - Civil Procedure",
+    "act": "Transfer of Property Act, 1882 & Civil Procedure Code, 1908",
+    "summary": "Legal framework for resolving property disputes through civil courts, including ownership, title, and boundary disputes.",
+    "detailed_description": "Property disputes are resolved through civil courts. Common disputes include ownership claims, boundary issues, illegal possession, and document fraud. The process involves filing a civil suit with proper documentation.",
+    "punishment": "Illegal occupation: Criminal case + eviction. Document forgery: 7 years imprisonment + fine",
+    "category": "Civil",
+    "subcategory": "Property",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "How long do property cases take?", "a": "Civil property cases typically take 5-10 years, but can be faster with good documentation."},
+      {"q": "Can I sell property under dispute?", "a": "Generally not advisable. Courts may issue stay orders preventing sale."},
+      {"q": "What documents prove ownership?", "a": "Sale deed, title documents, property tax receipts, electricity bills in your name."}
+    ]
+  },
+  {
+    "id": "consumer_protection_act",
+    "keywords": ["consumer rights", "defective products", "consumer complaint", "refund", "warranty"],
+    "title": "Consumer Protection Act 2019",
+    "act": "Consumer Protection Act, 2019",
+    "summary": "Protects consumer rights and provides mechanism for addressing consumer grievances against defective goods and deficient services.",
+    "detailed_description": "The Act establishes consumer protection councils and consumer disputes redressal commissions. It covers rights to safety, information, choice, redressal, and consumer education.",
+    "punishment": "Misleading advertisements: Fine up to ₹10 lakhs. Repeat offenders: ₹50 lakhs fine + imprisonment up to 5 years",
+    "category": "Consumer",
+    "subcategory": "Consumer Rights",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "Time limit for consumer complaints?", "a": "You must file within 2 years of the problem occurring."},
+      {"q": "Fees for consumer court?", "a": "₹200 for claims up to ₹5 lakhs, ₹500 for higher amounts."},
+      {"q": "Can I file online complaints?", "a": "Yes, use National Consumer Helpline 1800-11-4000 or consumer.nic.in portal."}
+    ]
+  },
+  {
+    "id": "domestic_violence_act",
+    "keywords": ["domestic violence", "protection of women", "domestic abuse", "harassment", "dowry"],
+    "title": "Protection of Women from Domestic Violence Act 2005",
+    "act": "Protection of Women from Domestic Violence Act, 2005",
+    "summary": "Provides protection to women from domestic violence and abuse, including physical, mental, sexual, and economic abuse.",
+    "detailed_description": "The Act covers all forms of domestic violence and provides for protection orders, residence orders, monetary relief, and custody orders. It also covers live-in partners.",
+    "punishment": "Imprisonment up to 1 year + fine. Breach of protection order: additional 1 year imprisonment",
+    "category": "Criminal",
+    "subcategory": "Women Protection",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "Can I file case without evidence?", "a": "Yes, your statement is evidence. Medical reports, photos help strengthen the case."},
+      {"q": "Will I have to leave my home?", "a": "No, the law protects your right to live in the shared household."},
+      {"q": "Is the process confidential?", "a": "Court proceedings are usually private to protect your privacy."}
+    ]
+  },
+  {
+    "id": "employment_rights",
+    "keywords": ["employment rights", "salary delay", "minimum wage", "overtime", "workplace harassment"],
+    "title": "Employment and Labor Rights",
+    "act": "Payment of Wages Act 1936, Minimum Wages Act 1948",
+    "summary": "Protects employee rights including minimum wages, timely salary payment, overtime compensation, and safe working conditions.",
+    "detailed_description": "Labor laws ensure fair treatment of employees including minimum wage, maximum working hours, overtime pay, and workplace safety. Employers must follow proper procedures for termination.",
+    "punishment": "Salary delays: ₹20,000-50,000 fine. Serious violations: imprisonment + fine",
+    "category": "Civil",
+    "subcategory": "Employment",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "Can employer fire without notice?", "a": "For permanent employees, 30 days notice or payment required."},
+      {"q": "Am I entitled to overtime pay?", "a": "Yes, double wages for work beyond 9 hours per day."},
+      {"q": "What if employer doesn't pay PF?", "a": "File complaint with PF Commissioner or online at epfindia.gov.in."}
+    ]
+  },
+  {
+    "id": "cybercrime_protection",
+    "keywords": ["cybercrime", "online fraud", "cyber security", "hacking", "identity theft", "UPI fraud"],
+    "title": "Information Technology Act 2000 - Cybercrime Protection",
+    "act": "Information Technology Act, 2000",
+    "summary": "Provides legal framework for preventing and punishing cybercrimes including hacking, data theft, and online fraud.",
+    "detailed_description": "The Act covers various cybercrimes like hacking, data theft, identity theft, cyberbullying, and online fraud. It establishes cyber appellate tribunals and prescribes penalties.",
+    "punishment": "Cyber fraud: 3 years imprisonment + fine. Hacking: up to 3 years jail. Identity theft: 3 years + ₹1 lakh fine",
+    "category": "Criminal",
+    "subcategory": "Cybercrime",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "Can I get money back if scammed online?", "a": "Yes, if reported within 24 hours to bank and cyber cell, recovery chances are high."},
+      {"q": "How to report fake social media profiles?", "a": "Report on cybercrime.gov.in and to the social media platform."},
+      {"q": "Is sharing private photos illegal?", "a": "Yes, up to 7 years imprisonment under IT Act."}
+    ]
+  },
+  {
+    "id": "police_fir_procedure",
+    "keywords": ["police complaint", "FIR", "first information report", "police procedure", "criminal complaint"],
+    "title": "Filing Police Complaint (FIR) - Criminal Procedure",
+    "act": "Criminal Procedure Code, 1973",
+    "summary": "Legal procedure for filing First Information Report (FIR) with police for cognizable offenses.",
+    "detailed_description": "FIR is the first step in criminal justice process. Police must register FIR for cognizable offenses and provide free copy to complainant.",
+    "punishment": "Police refusing to file FIR: disciplinary action + departmental inquiry",
+    "category": "Criminal",
+    "subcategory": "Police Procedure",
+    "state": "All India",
+    "language": "en",
+    "faqs": [
+      {"q": "Can police refuse to file FIR?", "a": "No, they cannot refuse FIR for cognizable offenses. Complain to higher authorities."},
+      {"q": "Difference between FIR and complaint?", "a": "FIR for serious crimes, complaint for non-cognizable offenses requiring court permission."},
+      {"q": "Can I file FIR online?", "a": "Yes, many states have online FIR facility. Check state police website."}
+    ]
+  },
+  {
+    "id": "rental_disputes",
+    "keywords": ["rent dispute", "landlord tenant", "eviction", "rental agreement", "security deposit"],
+    "title": "Rental and Tenancy Disputes",
+    "act": "State Rent Control Acts",
+    "summary": "Laws governing landlord-tenant relationships, rent control, eviction procedures, and tenant rights.",
+    "detailed_description": "Rent laws vary by state but generally cover rent control, eviction procedures, tenant rights, and dispute resolution. Most states have rent control acts with specific procedures.",
+    "punishment": "Illegal eviction: Criminal case + compensation. Rent act violations: fine + damages",
+    "category": "Civil",
+    "subcategory": "Property",
+    "state": "State Specific",
+    "language": "en",
+    "faqs": [
+      {"q": "Can landlord evict without notice?", "a": "No, proper legal notice and court procedure required for eviction."},
+      {"q": "When can security deposit be forfeited?", "a": "Only for actual damages, unpaid rent, or breach of agreement terms."},
+      {"q": "What if landlord refuses to return deposit?", "a": "File complaint in rent court or consumer court for refund with interest."}
+    ]
+  }
+]
