@@ -4,94 +4,208 @@
 
 {% block content %}
 <div class="container py-5">
-    <h1 class="mb-4">Know Your Rights</h1>
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Know Your Rights</h1>
+        <p class="lead text-muted">Understanding your fundamental and legal rights as an Indian citizen</p>
+    </div>
     
     <div class="row">
-        <!-- Fundamental Rights -->
-        <div class="col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h3 class="card-title"><i class="fas fa-shield-alt text-primary"></i> Fundamental Rights</h3>
-                    <ul class="list-unstyled">
-                        <li class="mb-3">
-                            <h5>Right to Equality (Articles 14-18)</h5>
-                            <p>Equality before law and equal protection of laws</p>
-                        </li>
-                        <li class="mb-3">
-                            <h5>Right to Freedom (Articles 19-22)</h5>
-                            <p>Freedom of speech, expression, assembly, association, movement, etc.</p>
-                        </li>
-                        <li class="mb-3">
-                            <h5>Right against Exploitation (Articles 23-24)</h5>
-                            <p>Prohibition of trafficking and forced labor</p>
-                        </li>
-                        <li class="mb-3">
-                            <h5>Right to Freedom of Religion (Articles 25-28)</h5>
-                            <p>Freedom to practice and propagate any religion</p>
-                        </li>
-                    </ul>
+        <div class="col-lg-9">
+            <div class="row">
+                <!-- Fundamental Rights -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-flag text-success me-3" style="font-size: 2rem;"></i>
+                                <h5 class="mb-0">Fundamental Rights</h5>
+                            </div>
+                            <p class="text-muted">Constitutional rights guaranteed to every Indian citizen</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Right to Equality</li>
+                                <li><i class="fas fa-check text-success"></i> Right to Freedom</li>
+                                <li><i class="fas fa-check text-success"></i> Right against Exploitation</li>
+                                <li><i class="fas fa-check text-success"></i> Right to Constitutional Remedies</li>
+                            </ul>
+                            <button class="btn btn-outline-primary" onclick="showRightsDetail('fundamental')">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Women's Rights -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-female text-danger me-3" style="font-size: 2rem;"></i>
+                                <h5 class="mb-0">Women's Rights</h5>
+                            </div>
+                            <p class="text-muted">Special protections and rights for women in India</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Protection from Domestic Violence</li>
+                                <li><i class="fas fa-check text-success"></i> Equal Pay for Equal Work</li>
+                                <li><i class="fas fa-check text-success"></i> Maternity Benefits</li>
+                                <li><i class="fas fa-check text-success"></i> Sexual Harassment Protection</li>
+                            </ul>
+                            <button class="btn btn-outline-primary" onclick="showRightsDetail('women')">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Consumer Rights -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-shopping-cart text-primary me-3" style="font-size: 2rem;"></i>
+                                <h5 class="mb-0">Consumer Rights</h5>
+                            </div>
+                            <p class="text-muted">Rights protecting consumers in the marketplace</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Right to Safety</li>
+                                <li><i class="fas fa-check text-success"></i> Right to Information</li>
+                                <li><i class="fas fa-check text-success"></i> Right to Choose</li>
+                                <li><i class="fas fa-check text-success"></i> Right to Redressal</li>
+                            </ul>
+                            <button class="btn btn-outline-primary" onclick="showRightsDetail('consumer')">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Worker Rights -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-hard-hat text-warning me-3" style="font-size: 2rem;"></i>
+                                <h5 class="mb-0">Worker Rights</h5>
+                            </div>
+                            <p class="text-muted">Labor rights and protections for employees</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Fair Wages</li>
+                                <li><i class="fas fa-check text-success"></i> Safe Working Conditions</li>
+                                <li><i class="fas fa-check text-success"></i> Social Security</li>
+                                <li><i class="fas fa-check text-success"></i> Right to Form Unions</li>
+                            </ul>
+                            <button class="btn btn-outline-primary" onclick="showRightsDetail('worker')">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Children's Rights -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-child text-info me-3" style="font-size: 2rem;"></i>
+                                <h5 class="mb-0">Children's Rights</h5>
+                            </div>
+                            <p class="text-muted">Special protections for children and minors</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Right to Education</li>
+                                <li><i class="fas fa-check text-success"></i> Protection from Child Labor</li>
+                                <li><i class="fas fa-check text-success"></i> Right to Health and Nutrition</li>
+                                <li><i class="fas fa-check text-success"></i> Protection from Abuse</li>
+                            </ul>
+                            <button class="btn btn-outline-primary" onclick="showRightsDetail('children')">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Senior Citizens Rights -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-user-friends text-secondary me-3" style="font-size: 2rem;"></i>
+                                <h5 class="mb-0">Senior Citizens Rights</h5>
+                            </div>
+                            <p class="text-muted">Rights and benefits for elderly citizens</p>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Maintenance from Children</li>
+                                <li><i class="fas fa-check text-success"></i> Healthcare Benefits</li>
+                                <li><i class="fas fa-check text-success"></i> Property Protection</li>
+                                <li><i class="fas fa-check text-success"></i> Social Security</li>
+                            </ul>
+                            <button class="btn btn-outline-primary" onclick="showRightsDetail('senior')">Learn More</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Legal Rights -->
-        <div class="col-md-6 mb-4">
-            <div class="card h-100">
+        
+        <div class="col-lg-3">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-balance-scale"></i> Constitutional Articles</h5>
+                </div>
                 <div class="card-body">
-                    <h3 class="card-title"><i class="fas fa-gavel text-primary"></i> Legal Rights</h3>
-                    <ul class="list-unstyled">
-                        <li class="mb-3">
-                            <h5>Right to Legal Aid</h5>
-                            <p>Free legal services for eligible individuals</p>
-                        </li>
-                        <li class="mb-3">
-                            <h5>Right to Fair Trial</h5>
-                            <p>Right to be heard and defended by a legal practitioner</p>
-                        </li>
-                        <li class="mb-3">
-                            <h5>Right to Information</h5>
-                            <p>Access to information under government control</p>
-                        </li>
-                        <li class="mb-3">
-                            <h5>Consumer Rights</h5>
-                            <p>Protection against unfair trade practices</p>
-                        </li>
-                    </ul>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary btn-sm" onclick="showArticle('14')">
+                            Article 14 - Equality
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm" onclick="showArticle('19')">
+                            Article 19 - Freedom
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm" onclick="showArticle('21')">
+                            Article 21 - Life & Liberty
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm" onclick="showArticle('32')">
+                            Article 32 - Right to Remedies
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow mt-3">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-phone"></i> Rights Violation?</h5>
+                </div>
+                <div class="card-body">
+                    <p class="small">If your rights are being violated:</p>
+                    <div class="d-grid gap-2">
+                        <a href="tel:14433" class="btn btn-danger btn-sm">
+                            <i class="fas fa-phone"></i> Human Rights: 14433
+                        </a>
+                        <a href="{{ url_for('emergency_help') }}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-exclamation-triangle"></i> Emergency Help
+                        </a>
+                        <a href="{{ url_for('find_lawyer') }}" class="btn btn-info btn-sm">
+                            <i class="fas fa-user-tie"></i> Find Lawyer
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow mt-3">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-question-circle"></i> Have Questions?</h5>
+                </div>
+                <div class="card-body">
+                    <p class="small">Get personalized guidance about your rights</p>
+                    <a href="{{ url_for('chat') }}" class="btn btn-primary w-100">
+                        <i class="fas fa-robot"></i> Ask Nyaya AI
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Additional Resources -->
-    <div class="mt-4">
-        <h3 class="mb-3">Additional Resources</h3>
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-book-reader text-primary"></i> Legal Education</h5>
-                        <p class="card-text">Access free legal education materials and resources.</p>
-                        <a href="{{ url_for('law_library') }}" class="btn btn-primary">Visit Law Library</a>
-                    </div>
-                </div>
+<!-- Rights Detail Modal -->
+<div class="modal fade" id="rightsDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rightsDetailTitle">Rights Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-question-circle text-primary"></i> Legal Assistance</h5>
-                        <p class="card-text">Get help from our AI-powered legal assistant.</p>
-                        <a href="{{ url_for('chat') }}" class="btn btn-primary">Ask Nyaya</a>
-                    </div>
-                </div>
+            <div class="modal-body" id="rightsDetailBody">
+                <!-- Rights details will be loaded here -->
             </div>
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-user-tie text-primary"></i> Professional Help</h5>
-                        <p class="card-text">Connect with qualified legal professionals.</p>
-                        <a href="{{ url_for('find_lawyer') }}" class="btn btn-primary">Find a Lawyer</a>
-                    </div>
-                </div>
+            <div class="modal-footer">
+                <a href="{{ url_for('chat') }}" class="btn btn-primary">Ask Questions About These Rights</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -204,4 +318,4 @@ function showArticle(articleNumber) {
     alert(`Article ${articleNumber} details would be displayed here. In a full implementation, this would show the complete text and explanation of Constitutional Article ${articleNumber}.`);
 }
 </script>
-{% endblock %}
+{% endblock %} 
