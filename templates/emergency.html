@@ -1,0 +1,116 @@
+{% extends "base_nyaya.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-danger mb-4">
+                <i class="fas fa-exclamation-triangle"></i> Emergency Legal Help
+            </h1>
+            <div class="alert alert-danger">
+                <strong>If you are in immediate danger, call 112 (Emergency Services) immediately.</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Emergency Helplines -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">Emergency Helplines</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <strong>Police:</strong> 100<br>
+                            <small class="text-muted">For immediate police assistance</small>
+                        </li>
+                        <li class="mb-3">
+                            <strong>Women's Helpline:</strong> 1091<br>
+                            <small class="text-muted">24/7 women's emergency helpline</small>
+                        </li>
+                        <li class="mb-3">
+                            <strong>Child Helpline:</strong> 1098<br>
+                            <small class="text-muted">For children in distress</small>
+                        </li>
+                        <li class="mb-3">
+                            <strong>National Legal Services Authority:</strong> 1516<br>
+                            <small class="text-muted">Free legal aid services</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Immediate Actions -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">Immediate Actions</h3>
+                    <ol class="mb-0">
+                        <li class="mb-2">Ensure your immediate safety</li>
+                        <li class="mb-2">Contact emergency services if needed</li>
+                        <li class="mb-2">Document everything (take photos, save messages)</li>
+                        <li class="mb-2">Contact a legal professional</li>
+                        <li class="mb-2">Inform trusted family/friends</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Emergency Legal Resources -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">Legal Resources</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <a href="{{ url_for('find_lawyer') }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-gavel"></i> Find Emergency Lawyer
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <a href="{{ url_for('know_your_rights') }}" class="btn btn-outline-info btn-sm">
+                                <i class="fas fa-book"></i> Know Your Rights
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <a href="{{ url_for('chat') }}" class="btn btn-outline-success btn-sm">
+                                <i class="fas fa-comments"></i> Get Legal Guidance
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Tips -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">Safety Tips</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-shield-alt text-primary"></i>
+                            Keep important documents in a safe place
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-phone text-primary"></i>
+                            Save emergency numbers on speed dial
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-camera text-primary"></i>
+                            Document any evidence or incidents
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-users text-primary"></i>
+                            Build a support network
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

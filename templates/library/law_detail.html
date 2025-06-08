@@ -1,0 +1,333 @@
+{% extends "base_nyaya.html" %}
+
+{% block title %}{{ law.title }} - Legal Guide{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('law_library') }}">Law Library</a></li>
+                    <li class="breadcrumb-item active">{{ law.title }}</li>
+                </ol>
+            </nav>
+            
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h1 class="display-5 fw-bold text-primary">{{ law.title }}</h1>
+                    <div class="d-flex gap-2 mb-2">
+                        <span class="badge bg-primary fs-6">{{ law.category }}</span>
+                        <span class="badge bg-secondary fs-6">{{ law.state }}</span>
+                    </div>
+                    <p class="lead text-muted">{{ law.summary }}</p>
+                </div>
+                <div class="text-end">
+                    <button class="btn btn-outline-primary" onclick="window.print()">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                    <button class="btn btn-outline-success" onclick="shareContent()">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Overview Section -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-light">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-info-circle text-primary"></i> Overview
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="law-content">
+                        {{ law.description | replace('\n', '<br>') | safe }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Punishment Section -->
+            {% if law.punishment %}
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-warning bg-opacity-10">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-exclamation-triangle text-warning"></i> Penalties & Punishment
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <strong>Legal Consequences:</strong><br>
+                        {{ law.punishment }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Related Laws Section -->
+            {% if law.related_sections %}
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-info bg-opacity-10">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-book text-info"></i> Related Laws & Sections
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for section in law.related_sections %}
+                        <li class="list-group-item d-flex align-items-center">
+                            <i class="fas fa-gavel text-muted me-2"></i>
+                            {{ section }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- FAQs Section -->
+            {% if law.faqs %}
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-success bg-opacity-10">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-question-circle text-success"></i> Frequently Asked Questions
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="faqAccordion">
+                        {% for faq in law.faqs %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq{{ loop.index }}">
+                                <button class="accordion-button collapsed" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}">
+                                    {{ faq.q }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" 
+                                 data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    {{ faq.a }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Quick Actions -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-hands-helping"></i> Need Help?
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('chat') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-robot"></i> Ask AI Assistant
+                        </a>
+                        <a href="{{ url_for('find_lawyer') }}" class="btn btn-outline-success">
+                            <i class="fas fa-user-tie"></i> Find a Lawyer
+                        </a>
+                        <a href="{{ url_for('emergency_help') }}" class="btn btn-outline-danger">
+                            <i class="fas fa-phone"></i> Emergency Helpline
+                        </a>
+                        <button class="btn btn-outline-info" onclick="askQuestion()">
+                            <i class="fas fa-question"></i> Ask Specific Question
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Important Notice -->
+            <div class="card mb-4 border-warning">
+                <div class="card-header bg-warning bg-opacity-10">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-info-circle text-warning"></i> Important Notice
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <small class="text-muted">
+                        This information is for educational purposes only and should not be considered as legal advice. 
+                        For specific legal matters, please consult with a qualified lawyer.
+                    </small>
+                </div>
+            </div>
+
+            <!-- Related Topics -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-link"></i> Related Topics
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-wrap gap-1">
+                        {% if law.category == 'Road Safety' %}
+                            <a href="{{ url_for('law_library', q='car accident') }}" class="btn btn-sm btn-outline-primary">Car Accident</a>
+                            <a href="{{ url_for('law_library', q='driving license') }}" class="btn btn-sm btn-outline-primary">Driving License</a>
+                            <a href="{{ url_for('law_library', q='insurance') }}" class="btn btn-sm btn-outline-primary">Insurance</a>
+                        {% elif law.category == 'Property' %}
+                            <a href="{{ url_for('law_library', q='land dispute') }}" class="btn btn-sm btn-outline-primary">Land Dispute</a>
+                            <a href="{{ url_for('law_library', q='rent') }}" class="btn btn-sm btn-outline-primary">Rent Issues</a>
+                            <a href="{{ url_for('law_library', q='property tax') }}" class="btn btn-sm btn-outline-primary">Property Tax</a>
+                        {% elif law.category == 'Consumer' %}
+                            <a href="{{ url_for('law_library', q='online shopping') }}" class="btn btn-sm btn-outline-primary">Online Shopping</a>
+                            <a href="{{ url_for('law_library', q='warranty') }}" class="btn btn-sm btn-outline-primary">Warranty</a>
+                            <a href="{{ url_for('law_library', q='refund') }}" class="btn btn-sm btn-outline-primary">Refund</a>
+                        {% elif law.category == 'Employment' %}
+                            <a href="{{ url_for('law_library', q='salary') }}" class="btn btn-sm btn-outline-primary">Salary Issues</a>
+                            <a href="{{ url_for('law_library', q='overtime') }}" class="btn btn-sm btn-outline-primary">Overtime</a>
+                            <a href="{{ url_for('law_library', q='workplace harassment') }}" class="btn btn-sm btn-outline-primary">Harassment</a>
+                        {% else %}
+                            <a href="{{ url_for('law_library', q='legal help') }}" class="btn btn-sm btn-outline-primary">Legal Help</a>
+                            <a href="{{ url_for('law_library', q='court') }}" class="btn btn-sm btn-outline-primary">Court Process</a>
+                            <a href="{{ url_for('law_library', q='lawyer') }}" class="btn btn-sm btn-outline-primary">Find Lawyer</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Question Modal -->
+<div class="modal fade" id="questionModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ask a Question About {{ law.title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="questionForm">
+                    <div class="mb-3">
+                        <label for="question" class="form-label">Your Question</label>
+                        <textarea class="form-control" id="question" rows="4" 
+                                  placeholder="Ask anything about this law or your specific situation..."></textarea>
+                    </div>
+                </form>
+                <div id="answerSection" style="display: none;">
+                    <h6>AI Assistant Response:</h6>
+                    <div id="aiAnswer" class="border rounded p-3 bg-light"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitQuestion()">
+                    <i class="fas fa-paper-plane"></i> Ask Question
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.law-content {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.law-content h4 {
+    color: #495057;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.card-header {
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+}
+
+.badge {
+    font-size: 0.8rem;
+}
+
+@media print {
+    .btn, .card-header, nav, .modal { display: none !important; }
+    .card { border: none !important; box-shadow: none !important; }
+}
+</style>
+
+<script>
+function shareContent() {
+    if (navigator.share) {
+        navigator.share({
+            title: '{{ law.title }}',
+            text: '{{ law.summary }}',
+            url: window.location.href
+        });
+    } else {
+        // Fallback - copy to clipboard
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            alert('Link copied to clipboard!');
+        });
+    }
+}
+
+function askQuestion() {
+    const modal = new bootstrap.Modal(document.getElementById('questionModal'));
+    modal.show();
+}
+
+async function submitQuestion() {
+    const question = document.getElementById('question').value.trim();
+    if (!question) {
+        alert('Please enter a question');
+        return;
+    }
+
+    const answerSection = document.getElementById('answerSection');
+    const aiAnswer = document.getElementById('aiAnswer');
+    
+    // Show loading
+    aiAnswer.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting answer...';
+    answerSection.style.display = 'block';
+
+    try {
+        const response = await fetch('/api/legal-question', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                question: question,
+                context: '{{ law.title }}: {{ law.summary }}'
+            })
+        });
+
+        const data = await response.json();
+        if (data.answer) {
+            aiAnswer.innerHTML = data.answer.replace(/\n/g, '<br>');
+        } else {
+            aiAnswer.innerHTML = 'Sorry, I could not answer your question. Please try asking differently or consult a lawyer.';
+        }
+    } catch (error) {
+        aiAnswer.innerHTML = 'Error getting answer. Please try again later.';
+    }
+}
+
+// Auto-expand first FAQ
+document.addEventListener('DOMContentLoaded', function() {
+    const firstFaq = document.querySelector('#collapse1');
+    if (firstFaq) {
+        firstFaq.classList.add('show');
+        document.querySelector('#faq1 button').classList.remove('collapsed');
+    }
+});
+</script>
+{% endblock %}

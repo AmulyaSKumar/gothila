@@ -1,0 +1,131 @@
+{% extends "base_nyaya.html" %}
+
+{% block title %}Find a Lawyer - Nyaya{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="mb-3">Find a Lawyer</h1>
+            <p class="lead">Connect with verified legal professionals based on your needs</p>
+        </div>
+    </div>
+
+    <!-- Search Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('find_lawyer') }}" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Specialization</label>
+                    <select name="specialization" class="form-select">
+                        <option value="">All Specializations</option>
+                        <option value="civil" {% if request.args.get('specialization') == 'civil' %}selected{% endif %}>Civil Law</option>
+                        <option value="criminal" {% if request.args.get('specialization') == 'criminal' %}selected{% endif %}>Criminal Law</option>
+                        <option value="corporate" {% if request.args.get('specialization') == 'corporate' %}selected{% endif %}>Corporate Law</option>
+                        <option value="family" {% if request.args.get('specialization') == 'family' %}selected{% endif %}>Family Law</option>
+                        <option value="property" {% if request.args.get('specialization') == 'property' %}selected{% endif %}>Property Law</option>
+                        <option value="tax" {% if request.args.get('specialization') == 'tax' %}selected{% endif %}>Tax Law</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Location</label>
+                    <input type="text" name="location" class="form-control" value="{{ request.args.get('location', '') }}" placeholder="Enter city or state">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Language</label>
+                    <select name="language" class="form-select">
+                        <option value="">All Languages</option>
+                        <option value="english" {% if request.args.get('language') == 'english' %}selected{% endif %}>English</option>
+                        <option value="hindi" {% if request.args.get('language') == 'hindi' %}selected{% endif %}>Hindi</option>
+                        <option value="marathi" {% if request.args.get('language') == 'marathi' %}selected{% endif %}>Marathi</option>
+                        <option value="gujarati" {% if request.args.get('language') == 'gujarati' %}selected{% endif %}>Gujarati</option>
+                        <option value="tamil" {% if request.args.get('language') == 'tamil' %}selected{% endif %}>Tamil</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                    <a href="{{ url_for('find_lawyer') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-redo"></i> Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Emergency Lawyers Section -->
+    {% if emergency_lawyers %}
+    <div class="alert alert-danger mb-4" role="alert">
+        <h5><i class="fas fa-exclamation-triangle"></i> Need Immediate Legal Help?</h5>
+        <p class="mb-0">These lawyers are available for emergency consultations:</p>
+    </div>
+    <div class="row mb-4">
+        {% for lawyer in emergency_lawyers %}
+        <div class="col-md-6 mb-3">
+            <div class="card lawyer-card border-danger">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title">{{ lawyer.full_name }}</h5>
+                        <span class="badge bg-danger">Emergency Available</span>
+                    </div>
+                    <p class="text-muted mb-2">{{ lawyer.specializations|join(', ') }}</p>
+                    <div class="mb-2">
+                        <i class="fas fa-map-marker-alt text-muted"></i> {{ lawyer.location }}
+                    </div>
+                    <a href="{{ url_for('lawyer_profile', lawyer_id=lawyer.user_id) }}" class="btn btn-danger">
+                        Contact Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Regular Lawyers List -->
+    <div class="row">
+        {% if lawyers %}
+            {% for lawyer in lawyers %}
+            <div class="col-md-6 mb-4">
+                <div class="lawyer-card">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="mb-1">{{ lawyer.full_name }}</h5>
+                            <p class="text-muted mb-0">{{ lawyer.specializations|join(', ') }}</p>
+                        </div>
+                        {% if lawyer.rating %}
+                        <div class="rating-stars">
+                            {% for i in range(lawyer.rating|round|int) %}
+                            <i class="fas fa-star"></i>
+                            {% endfor %}
+                            <small class="text-muted">({{ lawyer.total_reviews }})</small>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <p><i class="fas fa-map-marker-alt text-muted"></i> {{ lawyer.location }}</p>
+                        <p><i class="fas fa-language text-muted"></i> {{ lawyer.languages|join(', ') }}</p>
+                        <p><i class="fas fa-gavel text-muted"></i> {{ lawyer.experience_years }} years experience</p>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-primary">₹{{ lawyer.hourly_rate }}/hour</span>
+                        <a href="{{ url_for('lawyer_profile', lawyer_id=lawyer.user_id) }}" class="btn btn-primary">
+                            View Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No lawyers found matching your criteria. Try adjusting your search filters.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

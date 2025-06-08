@@ -1,0 +1,243 @@
+{% extends "base_nyaya.html" %}
+
+{% block title %}Dashboard - Nyaya{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="sidebar p-3">
+                <h5 class="mb-3">
+                    <i class="fas fa-user"></i> 
+                    Welcome, {{ current_user.full_name or current_user.username }}!
+                </h5>
+                
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#overview" data-bs-toggle="pill">
+                            <i class="fas fa-tachometer-alt"></i> Overview
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#documents" data-bs-toggle="pill">
+                            <i class="fas fa-file-alt"></i> My Documents
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#notes" data-bs-toggle="pill">
+                            <i class="fas fa-sticky-note"></i> Case Notes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#lawyers" data-bs-toggle="pill">
+                            <i class="fas fa-user-tie"></i> My Lawyers
+                        </a>
+                    </li>
+                </ul>
+                
+                <hr>
+                
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('upload_file') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-upload"></i> Check Document
+                    </a>
+                    <a href="{{ url_for('chat') }}" class="btn btn-success btn-sm">
+                        <i class="fas fa-robot"></i> Ask Nyaya
+                    </a>
+                    <a href="{{ url_for('find_lawyer') }}" class="btn btn-info btn-sm">
+                        <i class="fas fa-search"></i> Find Lawyer
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="tab-content">
+                <!-- Overview Tab -->
+                <div class="tab-pane fade show active" id="overview">
+                    <h2 class="mb-4">Dashboard Overview</h2>
+                    
+                    <!-- Quick Stats -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-file-alt text-primary" style="font-size: 2rem;"></i>
+                                    <h4 class="mt-2">{{ documents|length }}</h4>
+                                    <p class="text-muted">Documents</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-sticky-note text-success" style="font-size: 2rem;"></i>
+                                    <h4 class="mt-2">{{ notes|length }}</h4>
+                                    <p class="text-muted">Notes</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-handshake text-info" style="font-size: 2rem;"></i>
+                                    <h4 class="mt-2">{{ connections|length }}</h4>
+                                    <p class="text-muted">Connections</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-calendar text-warning" style="font-size: 2rem;"></i>
+                                    <h4 class="mt-2">0</h4>
+                                    <p class="text-muted">Appointments</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-clock"></i> Recent Activity</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if documents %}
+                                <h6>Recent Documents</h6>
+                                {% for doc in documents[:3] %}
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <strong>{{ doc.original_filename }}</strong>
+                                        <br>
+                                        <small class="text-muted">{{ doc.upload_date.strftime('%B %d, %Y') }}</small>
+                                    </div>
+                                    <div>
+                                        {% if doc.processed %}
+                                            <span class="badge bg-success">Completed</span>
+                                            <a href="{{ url_for('view_results', document_id=doc.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        {% else %}
+                                            <span class="badge bg-warning">Processing</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted">No recent activity. Start by uploading a document or asking Nyaya a question.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Documents Tab -->
+                <div class="tab-pane fade" id="documents">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>My Documents</h2>
+                        <a href="{{ url_for('upload_file') }}" class="btn btn-primary">
+                            <i class="fas fa-upload"></i> Upload New Document
+                        </a>
+                    </div>
+                    
+                    {% if documents %}
+                        <div class="row">
+                            {% for doc in documents %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6>{{ doc.original_filename }}</h6>
+                                        <p class="text-muted">{{ doc.upload_date.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                                        {% if doc.compliance_score %}
+                                            <p>Compliance Score: 
+                                                <span class="compliance-score {% if doc.compliance_score >= 80 %}score-excellent{% elif doc.compliance_score >= 60 %}score-good{% else %}score-poor{% endif %}">
+                                                    {{ doc.compliance_score|round|int }}%
+                                                </span>
+                                            </p>
+                                        {% endif %}
+                                        <div class="d-flex gap-2">
+                                            {% if doc.processed %}
+                                                <a href="{{ url_for('view_results', document_id=doc.id) }}" class="btn btn-sm btn-primary">View Results</a>
+                                            {% else %}
+                                                <span class="badge bg-warning">Processing</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-file-upload text-muted" style="font-size: 4rem;"></i>
+                            <h4 class="mt-3">No Documents Yet</h4>
+                            <p class="text-muted">Upload your first legal document for AI analysis.</p>
+                            <a href="{{ url_for('upload_file') }}" class="btn btn-primary">Upload Document</a>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Notes Tab -->
+                <div class="tab-pane fade" id="notes">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Case Notes</h2>
+                        <a href="{{ url_for('case_notes') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> New Note
+                        </a>
+                    </div>
+                    
+                    {% if notes %}
+                        {% for note in notes %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h6>{{ note.title }}</h6>
+                                <p class="text-muted">{{ note.content[:200] }}{% if note.content|length > 200 %}...{% endif %}</p>
+                                <small class="text-muted">{{ note.updated_date.strftime('%B %d, %Y') }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-sticky-note text-muted" style="font-size: 4rem;"></i>
+                            <h4 class="mt-3">No Notes Yet</h4>
+                            <p class="text-muted">Create your first case note to track important information.</p>
+                            <a href="{{ url_for('case_notes') }}" class="btn btn-primary">Create Note</a>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Lawyers Tab -->
+                <div class="tab-pane fade" id="lawyers">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>My Lawyers</h2>
+                        <a href="{{ url_for('find_lawyer') }}" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Find Lawyer
+                        </a>
+                    </div>
+                    
+                    {% if connections %}
+                        {% for connection in connections %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h6>{{ connection.lawyer.user.full_name or connection.lawyer.user.username }}</h6>
+                                <p class="text-muted">{{ connection.case_description[:100] }}...</p>
+                                <span class="badge bg-{% if connection.status == 'active' %}success{% elif connection.status == 'pending' %}warning{% else %}secondary{% endif %}">
+                                    {{ connection.status|title }}
+                                </span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-user-tie text-muted" style="font-size: 4rem;"></i>
+                            <h4 class="mt-3">No Lawyer Connections</h4>
+                            <p class="text-muted">Connect with verified lawyers for personalized legal assistance.</p>
+                            <a href="{{ url_for('find_lawyer') }}" class="btn btn-primary">Find Lawyers</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

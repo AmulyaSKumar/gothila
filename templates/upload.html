@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Document - Legal Document Checker{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-indigo text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-upload me-2"></i>Upload Legal Document
+                    </h4>
+                </div>
+                <div class="card-body p-5">
+                    <p class="lead text-center text-charcoal mb-4">
+                        Upload your legal document for AI-powered compliance analysis
+                    </p>
+                    
+                    <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                        <div class="upload-area mb-4" id="uploadArea">
+                            <div class="upload-content text-center">
+                                <i class="fas fa-cloud-upload-alt fa-4x text-gold mb-3"></i>
+                                <h5 class="text-indigo mb-3">Drag and drop your document here</h5>
+                                <p class="text-muted mb-3">or</p>
+                                <input type="file" name="file" id="fileInput" class="d-none" accept=".pdf,.docx" required>
+                                <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('fileInput').click()">
+                                    <i class="fas fa-folder-open me-2"></i>Choose File
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="fileInfo" class="file-info d-none mb-4">
+                            <div class="alert alert-info">
+                                <i class="fas fa-file me-2"></i>
+                                <span id="fileName"></span>
+                                <span id="fileSize" class="text-muted ms-2"></span>
+                                <button type="button" class="btn-close float-end" onclick="clearFile()"></button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h6 class="text-indigo mb-3">Supported File Types:</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-file-pdf text-danger me-2"></i>
+                                        <span>PDF Documents (.pdf)</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-file-word text-primary me-2"></i>
+                                        <span>Word Documents (.docx)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h6 class="text-indigo mb-3">What We Analyze:</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Contract compliance
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Indian law requirements
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Risk assessment
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Missing clauses
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" disabled>
+                                <span id="submitText">
+                                    <i class="fas fa-analysis me-2"></i>Analyze Document
+                                </span>
+                                <span id="loadingText" class="d-none">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>Processing...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Upload Guidelines -->
+            <div class="card mt-4 border-0 bg-light">
+                <div class="card-body">
+                    <h6 class="text-indigo mb-3">
+                        <i class="fas fa-info-circle me-2"></i>Upload Guidelines
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled small">
+                                <li class="mb-1">
+                                    <i class="fas fa-circle text-gold me-2" style="font-size: 6px;"></i>
+                                    Maximum file size: 16MB
+                                </li>
+                                <li class="mb-1">
+                                    <i class="fas fa-circle text-gold me-2" style="font-size: 6px;"></i>
+                                    Processing time: 30 seconds - 2 minutes
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled small">
+                                <li class="mb-1">
+                                    <i class="fas fa-circle text-gold me-2" style="font-size: 6px;"></i>
+                                    Documents are processed securely
+                                </li>
+                                <li class="mb-1">
+                                    <i class="fas fa-circle text-gold me-2" style="font-size: 6px;"></i>
+                                    Analysis includes compliance score
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const submitBtn = document.getElementById('submitBtn');
+    const uploadForm = document.getElementById('uploadForm');
+    
+    // Drag and drop functionality
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('drag-over');
+    });
+    
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+    });
+    
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFile(files[0]);
+        }
+    });
+    
+    // File input change
+    fileInput.addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+            handleFile(e.target.files[0]);
+        }
+    });
+    
+    function handleFile(file) {
+        // Validate file type
+        const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Please select a PDF or DOCX file.');
+            return;
+        }
+        
+        // Validate file size (16MB)
+        if (file.size > 16 * 1024 * 1024) {
+            alert('File size must be less than 16MB.');
+            return;
+        }
+        
+        // Display file info
+        fileName.textContent = file.name;
+        fileSize.textContent = '(' + formatFileSize(file.size) + ')';
+        fileInfo.classList.remove('d-none');
+        submitBtn.disabled = false;
+        
+        // Set the file to the input
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        fileInput.files = dt.files;
+    }
+    
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    // Clear file
+    window.clearFile = function() {
+        fileInput.value = '';
+        fileInfo.classList.add('d-none');
+        submitBtn.disabled = true;
+    };
+    
+    // Form submission
+    uploadForm.addEventListener('submit', function() {
+        document.getElementById('submitText').classList.add('d-none');
+        document.getElementById('loadingText').classList.remove('d-none');
+        submitBtn.disabled = true;
+    });
+});
+</script>
+{% endblock %}

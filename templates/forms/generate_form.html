@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate {{ template.name }} - Nyaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .form-step {
+            border-left: 4px solid #007bff;
+            background: #f8f9fa;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .required-field::after {
+            content: " *";
+            color: #dc3545;
+        }
+        .ai-info {
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        .field-help {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <i class="fas fa-balance-scale me-2"></i>Nyaya
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('legal_forms') }}">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Forms
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="ai-info">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h4><i class="fas fa-magic me-2"></i>Smart Document Generator</h4>
+                    <p class="mb-0">Fill out the form below and our AI will generate a professionally formatted {{ template.name }} for you.</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <i class="fas fa-robot fa-3x"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-file-alt me-2"></i>{{ template.name }}</h5>
+                        <small class="text-muted">Category: {{ template.category.title() }}</small>
+                    </div>
+                    <div class="card-body">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <form method="POST" id="documentForm">
+                            {% for field in template.fields %}
+                            <div class="form-step">
+                                <div class="mb-3">
+                                    <label for="{{ field.name }}" class="form-label {{ 'required-field' if field.required }}">
+                                        {{ field.label }}
+                                    </label>
+                                    
+                                    {% if field.type == 'text' %}
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="{{ field.name }}" 
+                                               name="{{ field.name }}"
+                                               value="{{ form_data.get(field.name, '') if form_data else '' }}"
+                                               {{ 'required' if field.required }}>
+                                    
+                                    {% elif field.type == 'textarea' %}
+                                        <textarea class="form-control" 
+                                                  id="{{ field.name }}" 
+                                                  name="{{ field.name }}"
+                                                  rows="3"
+                                                  {{ 'required' if field.required }}>{{ form_data.get(field.name, '') if form_data else '' }}</textarea>
+                                    
+                                    {% elif field.type == 'number' %}
+                                        <input type="number" 
+                                               class="form-control" 
+                                               id="{{ field.name }}" 
+                                               name="{{ field.name }}"
+                                               value="{{ form_data.get(field.name, '') if form_data else '' }}"
+                                               {{ 'required' if field.required }}>
+                                    
+                                    {% elif field.type == 'date' %}
+                                        <input type="date" 
+                                               class="form-control" 
+                                               id="{{ field.name }}" 
+                                               name="{{ field.name }}"
+                                               value="{{ form_data.get(field.name, '') if form_data else '' }}"
+                                               {{ 'required' if field.required }}>
+                                    
+                                    {% elif field.type == 'select' %}
+                                        <select class="form-select" 
+                                                id="{{ field.name }}" 
+                                                name="{{ field.name }}"
+                                                {{ 'required' if field.required }}>
+                                            <option value="">Select an option</option>
+                                            {% for option in field.options %}
+                                                <option value="{{ option }}" 
+                                                        {{ 'selected' if form_data and form_data.get(field.name) == option }}>
+                                                    {{ option }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    {% endif %}
+
+                                    {% if field.name == 'complainant_name' %}
+                                        <div class="field-help">Enter your full legal name as it appears on official documents</div>
+                                    {% elif field.name == 'problem_description' %}
+                                        <div class="field-help">Be specific about the issue - include dates, amounts, and specific problems encountered</div>
+                                    {% elif field.name == 'relief_requested' %}
+                                        <div class="field-help">Specify what you want - refund, replacement, compensation, specific action, etc.</div>
+                                    {% elif field.name == 'incident_details' %}
+                                        <div class="field-help">Provide a clear, chronological description of what happened</div>
+                                    {% elif field.name == 'response_deadline' %}
+                                        <div class="field-help">Typically 15-30 days for most legal notices</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg" id="generateBtn">
+                                    <i class="fas fa-magic me-2"></i>Generate Document with AI
+                                </button>
+                                <a href="{{ url_for('legal_forms') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Templates
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h6><i class="fas fa-info-circle me-2"></i>Document Information</h6>
+                    </div>
+                    <div class="card-body">
+                        {% if template_id == 'consumer_complaint' %}
+                            <h6>Consumer Complaint Letter</h6>
+                            <p class="small">This document helps you file a formal complaint against businesses for defective products or poor services. It references Indian Consumer Protection laws.</p>
+                            <ul class="small">
+                                <li>Formal complaint format</li>
+                                <li>Legal backing under Consumer Protection Act</li>
+                                <li>Clear demand for resolution</li>
+                                <li>Ready for submission</li>
+                            </ul>
+                        {% elif template_id == 'legal_notice' %}
+                            <h6>Legal Notice</h6>
+                            <p class="small">A formal warning before taking legal action. This document puts the other party on notice about your legal claims.</p>
+                            <ul class="small">
+                                <li>Legally binding format</li>
+                                <li>Clear statement of facts</li>
+                                <li>Demand for remedy</li>
+                                <li>Warning of legal action</li>
+                            </ul>
+                        {% elif template_id == 'rent_agreement' %}
+                            <h6>Rental Agreement</h6>
+                            <p class="small">A comprehensive rental agreement compliant with Indian rental laws and local regulations.</p>
+                            <ul class="small">
+                                <li>Standard rental clauses</li>
+                                <li>Tenant and landlord rights</li>
+                                <li>Termination conditions</li>
+                                <li>Legal compliance</li>
+                            </ul>
+                        {% else %}
+                            <h6>{{ template.name }}</h6>
+                            <p class="small">Professional legal document generated using AI with proper formatting and legal language.</p>
+                        {% endif %}
+
+                        <hr>
+                        <h6><i class="fas fa-shield-alt me-2"></i>Security & Privacy</h6>
+                        <ul class="small text-muted">
+                            <li>Your data is encrypted</li>
+                            <li>Documents are generated securely</li>
+                            <li>No data shared with third parties</li>
+                            <li>Generated documents are yours</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6><i class="fas fa-lightbulb me-2"></i>Tips</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="small">
+                            <li>Fill all required fields marked with *</li>
+                            <li>Be specific and accurate with details</li>
+                            <li>Review generated document before use</li>
+                            <li>Consult a lawyer for complex cases</li>
+                            <li>Keep copies of all documents</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('documentForm').addEventListener('submit', function() {
+            const btn = document.getElementById('generateBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating Document...';
+            btn.disabled = true;
+        });
+    </script>
+</body>
+</html>

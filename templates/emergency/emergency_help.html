@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Legal Help - Nyaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .emergency-header {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 2rem 0;
+        }
+        .emergency-card {
+            border-left: 4px solid #dc3545;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .emergency-card:hover {
+            transform: translateY(-2px);
+        }
+        .lawyer-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: white;
+        }
+        .distance-badge {
+            background: #28a745;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        .loading-spinner {
+            display: none;
+        }
+        .btn-emergency {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+        .btn-emergency:hover {
+            background: #c82333;
+            border-color: #bd2130;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <i class="fas fa-balance-scale me-2"></i>Nyaya
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('home') }}">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="emergency-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="fas fa-exclamation-triangle me-2"></i>Emergency Legal Help</h1>
+                    <p class="lead mb-0">Get immediate legal assistance when you need it most</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button id="findLawyersBtn" class="btn btn-light btn-lg">
+                        <i class="fas fa-map-marker-alt me-2"></i>Find Nearby Lawyers
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <!-- Emergency Contacts -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="emergency-card card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-phone fa-3x text-danger mb-3"></i>
+                        <h5>Police Emergency</h5>
+                        <h3 class="text-danger">100</h3>
+                        <p class="text-muted">For immediate police assistance</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="emergency-card card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-gavel fa-3x text-warning mb-3"></i>
+                        <h5>Legal Aid Helpline</h5>
+                        <h3 class="text-warning">15100</h3>
+                        <p class="text-muted">Free legal advice and assistance</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="emergency-card card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shield-alt fa-3x text-info mb-3"></i>
+                        <h5>Women Helpline</h5>
+                        <h3 class="text-info">1091</h3>
+                        <p class="text-muted">24/7 support for women in distress</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location-based Lawyer Finder -->
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-user-tie me-2"></i>Emergency Lawyers Near You</h4>
+            </div>
+            <div class="card-body">
+                <div id="locationStatus" class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Click "Find Nearby Lawyers" to locate emergency legal assistance in your area
+                </div>
+                
+                <div id="loadingSpinner" class="loading-spinner text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Finding lawyers...</span>
+                    </div>
+                    <p class="mt-2">Searching for emergency lawyers near you...</p>
+                </div>
+
+                <div id="lawyersList" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- Emergency Legal Situations -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <h3>Common Emergency Legal Situations</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5><i class="fas fa-handcuffs text-danger me-2"></i>Arrest & Detention</h5>
+                                <ul class="mb-0">
+                                    <li>Right to remain silent</li>
+                                    <li>Right to legal representation</li>
+                                    <li>Contact family/lawyer within 24 hours</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5><i class="fas fa-home text-warning me-2"></i>Property Disputes</h5>
+                                <ul class="mb-0">
+                                    <li>Illegal possession/eviction</li>
+                                    <li>Property damage disputes</li>
+                                    <li>Boundary conflicts</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5><i class="fas fa-car-crash text-info me-2"></i>Accident Cases</h5>
+                                <ul class="mb-0">
+                                    <li>Traffic accidents</li>
+                                    <li>Insurance claims</li>
+                                    <li>Medical negligence</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5><i class="fas fa-users text-success me-2"></i>Family Emergencies</h5>
+                                <ul class="mb-0">
+                                    <li>Domestic violence</li>
+                                    <li>Child custody disputes</li>
+                                    <li>Maintenance issues</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let userLocation = null;
+
+        document.getElementById('findLawyersBtn').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                document.getElementById('locationStatus').innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Getting your location...';
+                document.getElementById('loadingSpinner').style.display = 'block';
+                
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        findEmergencyLawyers();
+                    },
+                    function(error) {
+                        document.getElementById('locationStatus').innerHTML = 
+                            '<i class="fas fa-exclamation-triangle me-2"></i>Unable to get your location. Please allow location access.';
+                        document.getElementById('loadingSpinner').style.display = 'none';
+                    }
+                );
+            } else {
+                document.getElementById('locationStatus').innerHTML = 
+                    '<i class="fas fa-times me-2"></i>Geolocation is not supported by this browser.';
+            }
+        });
+
+        function findEmergencyLawyers() {
+            if (!userLocation) return;
+
+            fetch(`/api/emergency-lawyers?lat=${userLocation.lat}&lng=${userLocation.lng}&radius=20`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    
+                    if (data.lawyers && data.lawyers.length > 0) {
+                        document.getElementById('locationStatus').innerHTML = 
+                            `<i class="fas fa-check me-2"></i>Found ${data.count} emergency lawyers within 20km`;
+                        displayLawyers(data.lawyers);
+                    } else {
+                        document.getElementById('locationStatus').innerHTML = 
+                            '<i class="fas fa-info-circle me-2"></i>No emergency lawyers found nearby. Try expanding your search radius.';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    document.getElementById('locationStatus').innerHTML = 
+                        '<i class="fas fa-exclamation-triangle me-2"></i>Error finding lawyers. Please try again.';
+                });
+        }
+
+        function displayLawyers(lawyers) {
+            const lawyersList = document.getElementById('lawyersList');
+            lawyersList.innerHTML = '';
+
+            lawyers.forEach(lawyer => {
+                const lawyerCard = document.createElement('div');
+                lawyerCard.className = 'lawyer-card';
+                
+                const specializations = lawyer.specializations.join(', ') || 'General Practice';
+                const languages = lawyer.languages.join(', ') || 'Not specified';
+                
+                lawyerCard.innerHTML = `
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5>${lawyer.name}</h5>
+                            <p class="mb-1"><strong>Specializations:</strong> ${specializations}</p>
+                            <p class="mb-1"><strong>Languages:</strong> ${languages}</p>
+                            <p class="mb-1"><strong>Rating:</strong> 
+                                ${'★'.repeat(Math.floor(lawyer.rating))}${'☆'.repeat(5-Math.floor(lawyer.rating))} 
+                                (${lawyer.rating}/5)
+                            </p>
+                            ${lawyer.hourly_rate ? `<p class="mb-0"><strong>Rate:</strong> ₹${lawyer.hourly_rate}/hour</p>` : ''}
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <span class="distance-badge">${lawyer.distance} km away</span>
+                            <div class="mt-2">
+                                ${lawyer.contact ? `<a href="tel:${lawyer.contact}" class="btn btn-emergency btn-sm me-2">
+                                    <i class="fas fa-phone me-1"></i>Call
+                                </a>` : ''}
+                                <a href="/find-lawyer?lawyer_id=${lawyer.id}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                lawyersList.appendChild(lawyerCard);
+            });
+        }
+    </script>
+</body>
+</html>

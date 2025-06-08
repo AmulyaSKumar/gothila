@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Results - Legal Document Checker{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Document Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2 class="text-indigo mb-2">
+                                <i class="fas fa-file-{{ 'pdf' if document.file_type == 'pdf' else 'word' }} me-2"></i>
+                                {{ document.original_filename }}
+                            </h2>
+                            <p class="text-muted mb-0">
+                                Uploaded: {{ document.upload_date.strftime('%B %d, %Y at %I:%M %p') }} |
+                                Size: {{ "%.1f"|format(document.file_size / 1024) }} KB |
+                                Type: {{ document.file_type.upper() }}
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="compliance-badge">
+                                <div class="score-circle">
+                                    <span class="score-text">{{ "%.0f"|format(document.compliance_score or 0) }}</span>
+                                    <span class="score-label">Score</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Summary -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card h-100">
+                <div class="card-header bg-indigo text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>Analysis Summary
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="stat-item">
+                                <div class="stat-number text-indigo">{{ analysis.word_count or 0 }}</div>
+                                <div class="stat-label">Words</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stat-item">
+                                <div class="stat-number text-indigo">{{ document.issues_found or 0 }}</div>
+                                <div class="stat-label">Issues Found</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6 class="text-indigo">Document Type</h6>
+                        <span class="badge bg-secondary fs-6">{{ analysis.document_type.title() if analysis.document_type else 'General' }}</span>
+                    </div>
+                    
+                    {% if analysis.legal_areas %}
+                    <div class="mb-3">
+                        <h6 class="text-indigo">Legal Areas Identified</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for area in analysis.legal_areas %}
+                                <span class="badge bg-info">{{ area }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="alert alert-light border">
+                        <h6 class="text-indigo mb-2">Summary</h6>
+                        <pre class="mb-0 text-charcoal">{{ analysis.summary or 'No summary available' }}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header bg-gold text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>Recommendations
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if analysis.recommendations %}
+                        <ul class="list-unstyled">
+                            {% for recommendation in analysis.recommendations %}
+                                <li class="mb-3">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <small>{{ recommendation }}</small>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No specific recommendations available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Issues Analysis -->
+    {% if analysis.issues %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Issues Found ({{ analysis.issues|length }})
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th width="15%">Severity</th>
+                                    <th width="20%">Category</th>
+                                    <th width="35%">Description</th>
+                                    <th width="30%">Suggestion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for issue in analysis.issues %}
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-{{ 'danger' if issue.severity == 'critical' else 'warning' if issue.severity == 'high' else 'info' if issue.severity == 'medium' else 'secondary' }}">
+                                            <i class="fas fa-{{ 'times-circle' if issue.severity == 'critical' else 'exclamation-triangle' if issue.severity == 'high' else 'info-circle' if issue.severity == 'medium' else 'check-circle' }}"></i>
+                                            {{ issue.severity.title() }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="text-capitalize">{{ issue.category }}</span>
+                                        {% if issue.line_number %}
+                                            <br><small class="text-muted">Line {{ issue.line_number }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ issue.description }}</td>
+                                    <td>
+                                        <small class="text-muted">{{ issue.suggestion or 'No specific suggestion available' }}</small>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Compliance Score Breakdown -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>Compliance Score Breakdown
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-indigo mb-3">Overall Compliance</h6>
+                            <div class="progress mb-3" style="height: 25px;">
+                                <div class="progress-bar bg-{{ 'success' if document.compliance_score >= 80 else 'warning' if document.compliance_score >= 60 else 'danger' }}" 
+                                     style="width: {{ document.compliance_score or 0 }}%">
+                                    {{ "%.1f"|format(document.compliance_score or 0) }}%
+                                </div>
+                            </div>
+                            
+                            <div class="compliance-interpretation">
+                                {% set score = document.compliance_score or 0 %}
+                                {% if score >= 80 %}
+                                    <div class="alert alert-success">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        <strong>Good Compliance:</strong> Document meets most legal requirements with minimal issues.
+                                    </div>
+                                {% elif score >= 60 %}
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        <strong>Moderate Compliance:</strong> Document has some compliance issues that should be addressed.
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-danger">
+                                        <i class="fas fa-times-circle me-2"></i>
+                                        <strong>Poor Compliance:</strong> Document requires significant review and corrections.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h6 class="text-indigo mb-3">Issue Severity Distribution</h6>
+                            {% set critical_count = analysis.issues | selectattr('severity', 'equalto', 'critical') | list | length %}
+                            {% set high_count = analysis.issues | selectattr('severity', 'equalto', 'high') | list | length %}
+                            {% set medium_count = analysis.issues | selectattr('severity', 'equalto', 'medium') | list | length %}
+                            {% set low_count = analysis.issues | selectattr('severity', 'equalto', 'low') | list | length %}
+                            
+                            <div class="severity-stats">
+                                {% if critical_count > 0 %}
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span><i class="fas fa-times-circle text-danger me-2"></i>Critical</span>
+                                    <span class="badge bg-danger">{{ critical_count }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if high_count > 0 %}
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span><i class="fas fa-exclamation-triangle text-warning me-2"></i>High</span>
+                                    <span class="badge bg-warning">{{ high_count }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if medium_count > 0 %}
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span><i class="fas fa-info-circle text-info me-2"></i>Medium</span>
+                                    <span class="badge bg-info">{{ medium_count }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if low_count > 0 %}
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span><i class="fas fa-check-circle text-secondary me-2"></i>Low</span>
+                                    <span class="badge bg-secondary">{{ low_count }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if not analysis.issues %}
+                                <div class="text-center text-muted">
+                                    <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                    <p>No issues found!</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row">
+        <div class="col-12 text-center">
+            <a href="{{ url_for('upload_file') }}" class="btn btn-primary me-3">
+                <i class="fas fa-upload me-2"></i>Upload Another Document
+            </a>
+            <a href="{{ url_for('document_history') }}" class="btn btn-outline-secondary me-3">
+                <i class="fas fa-history me-2"></i>View All Documents
+            </a>
+            <button class="btn btn-outline-success" onclick="window.print()">
+                <i class="fas fa-print me-2"></i>Print Results
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,207 @@
+{% extends "base_nyaya.html" %}
+
+{% block title %}Know Your Rights - Nyaya{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Know Your Rights</h1>
+    
+    <div class="row">
+        <!-- Fundamental Rights -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title"><i class="fas fa-shield-alt text-primary"></i> Fundamental Rights</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <h5>Right to Equality (Articles 14-18)</h5>
+                            <p>Equality before law and equal protection of laws</p>
+                        </li>
+                        <li class="mb-3">
+                            <h5>Right to Freedom (Articles 19-22)</h5>
+                            <p>Freedom of speech, expression, assembly, association, movement, etc.</p>
+                        </li>
+                        <li class="mb-3">
+                            <h5>Right against Exploitation (Articles 23-24)</h5>
+                            <p>Prohibition of trafficking and forced labor</p>
+                        </li>
+                        <li class="mb-3">
+                            <h5>Right to Freedom of Religion (Articles 25-28)</h5>
+                            <p>Freedom to practice and propagate any religion</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legal Rights -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title"><i class="fas fa-gavel text-primary"></i> Legal Rights</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <h5>Right to Legal Aid</h5>
+                            <p>Free legal services for eligible individuals</p>
+                        </li>
+                        <li class="mb-3">
+                            <h5>Right to Fair Trial</h5>
+                            <p>Right to be heard and defended by a legal practitioner</p>
+                        </li>
+                        <li class="mb-3">
+                            <h5>Right to Information</h5>
+                            <p>Access to information under government control</p>
+                        </li>
+                        <li class="mb-3">
+                            <h5>Consumer Rights</h5>
+                            <p>Protection against unfair trade practices</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Resources -->
+    <div class="mt-4">
+        <h3 class="mb-3">Additional Resources</h3>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-book-reader text-primary"></i> Legal Education</h5>
+                        <p class="card-text">Access free legal education materials and resources.</p>
+                        <a href="{{ url_for('law_library') }}" class="btn btn-primary">Visit Law Library</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-question-circle text-primary"></i> Legal Assistance</h5>
+                        <p class="card-text">Get help from our AI-powered legal assistant.</p>
+                        <a href="{{ url_for('chat') }}" class="btn btn-primary">Ask Nyaya</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-user-tie text-primary"></i> Professional Help</h5>
+                        <p class="card-text">Connect with qualified legal professionals.</p>
+                        <a href="{{ url_for('find_lawyer') }}" class="btn btn-primary">Find a Lawyer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function showRightsDetail(rightsType) {
+    const modal = new bootstrap.Modal(document.getElementById('rightsDetailModal'));
+    const modalTitle = document.getElementById('rightsDetailTitle');
+    const modalBody = document.getElementById('rightsDetailBody');
+    
+    const rightsDetails = {
+        'fundamental': {
+            title: 'Fundamental Rights',
+            content: `
+                <h6>Right to Equality (Articles 14-18)</h6>
+                <ul>
+                    <li>Equality before law and equal protection of laws</li>
+                    <li>Prohibition of discrimination on grounds of religion, race, caste, sex</li>
+                    <li>Equality of opportunity in public employment</li>
+                    <li>Abolition of untouchability and titles</li>
+                </ul>
+                
+                <h6>Right to Freedom (Articles 19-22)</h6>
+                <ul>
+                    <li>Freedom of speech and expression</li>
+                    <li>Freedom to assemble peacefully</li>
+                    <li>Freedom to form associations</li>
+                    <li>Freedom of movement and residence</li>
+                    <li>Freedom of profession and trade</li>
+                </ul>
+                
+                <h6>Right against Exploitation (Articles 23-24)</h6>
+                <ul>
+                    <li>Prohibition of traffic in human beings and forced labor</li>
+                    <li>Prohibition of employment of children in hazardous work</li>
+                </ul>
+            `
+        },
+        'women': {
+            title: 'Women\'s Rights in India',
+            content: `
+                <h6>Legal Protections</h6>
+                <ul>
+                    <li><strong>Domestic Violence Act 2005:</strong> Protection from domestic violence</li>
+                    <li><strong>Sexual Harassment Act 2013:</strong> Protection at workplace</li>
+                    <li><strong>Dowry Prohibition Act:</strong> Protection from dowry demands</li>
+                    <li><strong>Maternity Benefit Act:</strong> 26 weeks paid maternity leave</li>
+                </ul>
+                
+                <h6>Economic Rights</h6>
+                <ul>
+                    <li>Equal pay for equal work</li>
+                    <li>Property inheritance rights</li>
+                    <li>Right to maintenance</li>
+                    <li>Special economic schemes and subsidies</li>
+                </ul>
+                
+                <h6>How to Seek Help</h6>
+                <ul>
+                    <li>Women Helpline: 1091</li>
+                    <li>File FIR at police station</li>
+                    <li>Approach women's commission</li>
+                    <li>Contact NGOs working for women's rights</li>
+                </ul>
+            `
+        },
+        'consumer': {
+            title: 'Consumer Rights',
+            content: `
+                <h6>Six Basic Consumer Rights</h6>
+                <ul>
+                    <li><strong>Right to Safety:</strong> Protection against hazardous goods and services</li>
+                    <li><strong>Right to Information:</strong> Complete information about products/services</li>
+                    <li><strong>Right to Choose:</strong> Access to variety of goods at competitive prices</li>
+                    <li><strong>Right to be Heard:</strong> Voice complaints and be assured of fair hearing</li>
+                    <li><strong>Right to Redressal:</strong> Seek remedy against unfair trade practices</li>
+                    <li><strong>Right to Education:</strong> Acquire knowledge and skills for informed consumer</li>
+                </ul>
+                
+                <h6>Consumer Forums</h6>
+                <ul>
+                    <li><strong>District Forum:</strong> Up to ₹1 crore</li>
+                    <li><strong>State Commission:</strong> ₹1 crore to ₹10 crore</li>
+                    <li><strong>National Commission:</strong> Above ₹10 crore</li>
+                </ul>
+                
+                <h6>How to File Complaint</h6>
+                <ol>
+                    <li>Try to resolve with seller/service provider first</li>
+                    <li>File complaint with appropriate consumer forum</li>
+                    <li>Include all relevant documents and evidence</li>
+                    <li>Pay prescribed fees (waived for complaints up to ₹5 lakh)</li>
+                </ol>
+            `
+        }
+    };
+    
+    const detail = rightsDetails[rightsType] || { title: 'Rights Information', content: '<p>Detailed information will be available soon.</p>' };
+    
+    modalTitle.textContent = detail.title;
+    modalBody.innerHTML = detail.content;
+    
+    modal.show();
+}
+
+function showArticle(articleNumber) {
+    alert(`Article ${articleNumber} details would be displayed here. In a full implementation, this would show the complete text and explanation of Constitutional Article ${articleNumber}.`);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "base_nyaya.html" %}
+
+{% block title %}Create Lawyer Profile - Nyaya{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-user-tie"></i> Create Your Lawyer Profile
+                    </h2>
+                    
+                    <form method="POST" action="{{ url_for('create_lawyer_profile') }}">
+                        <div class="mb-3">
+                            <label for="bar_number" class="form-label">Bar Council Registration Number</label>
+                            <input type="text" class="form-control" id="bar_number" name="bar_number" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Areas of Specialization</label>
+                            <div class="row">
+                                {% for specialization in ['Criminal Law', 'Civil Law', 'Corporate Law', 'Family Law', 'Constitutional Law', 'Real Estate Law', 'Intellectual Property', 'Labor Law'] %}
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="specializations" value="{{ specialization }}" id="spec_{{ loop.index }}">
+                                        <label class="form-check-label" for="spec_{{ loop.index }}">
+                                            {{ specialization }}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="experience_years" class="form-label">Years of Experience</label>
+                            <input type="number" class="form-control" id="experience_years" name="experience_years" min="0" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Languages</label>
+                            <div class="row">
+                                {% for language in ['English', 'Hindi', 'Bengali', 'Telugu', 'Marathi', 'Tamil', 'Urdu', 'Gujarati', 'Kannada', 'Malayalam'] %}
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="languages" value="{{ language }}" id="lang_{{ loop.index }}">
+                                        <label class="form-check-label" for="lang_{{ loop.index }}">
+                                            {{ language }}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="hourly_rate" class="form-label">Hourly Rate (₹)</label>
+                            <input type="number" class="form-control" id="hourly_rate" name="hourly_rate" min="0" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">Professional Bio</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="4" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="education" class="form-label">Education</label>
+                            <textarea class="form-control" id="education" name="education" rows="3" required></textarea>
+                            <small class="text-muted">List your degrees, institutions, and years of graduation</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="certifications" class="form-label">Certifications & Awards</label>
+                            <textarea class="form-control" id="certifications" name="certifications" rows="3"></textarea>
+                            <small class="text-muted">List any relevant certifications, awards, or recognitions</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="emergency_available" name="emergency_available">
+                                <label class="form-check-label" for="emergency_available">
+                                    Available for Emergency Cases
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Create Profile
+                            </button>
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

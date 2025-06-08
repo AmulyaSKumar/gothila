@@ -1,0 +1,183 @@
+{% extends "base_nyaya.html" %}
+
+{% block title %}Ask Nyaya - AI Legal Assistant{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow h-100">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-robot me-2"></i>
+                        <h4 class="mb-0">Ask Nyaya - AI Legal Assistant</h4>
+                    </div>
+                    <small>Get instant answers to your legal questions</small>
+                </div>
+                
+                <div class="card-body d-flex flex-column" style="height: 70vh;">
+                    <div id="chat-messages" class="flex-grow-1 overflow-auto mb-3" style="max-height: 500px;">
+                        <div class="chat-bubble">
+                            <i class="fas fa-robot me-2"></i>
+                            Hello! I'm Nyaya, your AI legal assistant. I can help you with questions about Indian law, document analysis, and legal procedures. How can I assist you today?
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group">
+                                <input type="text" id="user-input" class="form-control" placeholder="Ask your legal question..." onkeypress="handleKeyPress(event)">
+                                <button class="btn btn-primary" onclick="sendMessage()">
+                                    <i class="fas fa-paper-plane"></i> Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i> 
+                            This AI provides general legal information. Always consult a qualified lawyer for specific legal advice.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Quick Questions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary btn-sm text-start" onclick="askQuickQuestion('How do I file an FIR?')">
+                            How do I file an FIR?
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm text-start" onclick="askQuickQuestion('What are consumer rights in India?')">
+                            What are consumer rights in India?
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm text-start" onclick="askQuickQuestion('How to register a company?')">
+                            How to register a company?
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm text-start" onclick="askQuickQuestion('What is the process for divorce?')">
+                            What is the process for divorce?
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm text-start" onclick="askQuickQuestion('How to file RTI application?')">
+                            How to file RTI application?
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow mt-3">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-tools"></i> Other Services</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('upload_file') }}" class="btn btn-success btn-sm">
+                            <i class="fas fa-file-check"></i> Document Checker
+                        </a>
+                        <a href="{{ url_for('find_lawyer') }}" class="btn btn-info btn-sm">
+                            <i class="fas fa-user-tie"></i> Find Lawyer
+                        </a>
+                        <a href="{{ url_for('legal_forms') }}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Legal Forms
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let sessionId = null;
+
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
+
+function askQuickQuestion(question) {
+    document.getElementById('user-input').value = question;
+    sendMessage();
+}
+
+async function sendMessage() {
+    const input = document.getElementById('user-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message to chat
+    addMessage(message, 'user');
+    input.value = '';
+    
+    // Show typing indicator
+    showTyping();
+    
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message,
+                session_id: sessionId
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.session_id) {
+            sessionId = data.session_id;
+        }
+        
+        hideTyping();
+        addMessage(data.response, 'bot');
+        
+    } catch (error) {
+        hideTyping();
+        addMessage('Sorry, I\'m having trouble connecting right now. Please try again.', 'bot');
+    }
+}
+
+function addMessage(message, type) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-bubble ${type}`;
+    
+    if (type === 'bot') {
+        messageDiv.innerHTML = `<i class="fas fa-robot me-2"></i>${message}`;
+    } else {
+        messageDiv.innerHTML = `<i class="fas fa-user me-2"></i>${message}`;
+    }
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function showTyping() {
+    const chatMessages = document.getElementById('chat-messages');
+    const typingDiv = document.createElement('div');
+    typingDiv.id = 'typing-indicator';
+    typingDiv.className = 'chat-bubble';
+    typingDiv.innerHTML = '<i class="fas fa-robot me-2"></i>Nyaya is typing...';
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function hideTyping() {
+    const typingIndicator = document.getElementById('typing-indicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
+}
+</script>
+{% endblock %}
