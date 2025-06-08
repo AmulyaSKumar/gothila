@@ -9,7 +9,6 @@
         <div class="col-12">
             <div class="bg-gradient-primary text-white rounded p-4 mb-4">
                 <h1 class="display-4 fw-bold mb-3">Law Library</h1>
-                <p class="lead mb-0">Understand Indian laws in simple language. Search for everyday topics like "bike accident", "property dispute", or "consumer rights".</p>
             </div>
         </div>
     </div>
@@ -22,38 +21,14 @@
                     <form method="GET" action="{{ url_for('law_library') }}">
                         <div class="row g-3">
                             <!-- Search Box -->
-                            <div class="col-md-6">
-                                <label for="search" class="form-label">Search Legal Topics</label>
-                                <input type="text" class="form-control form-control-lg" id="search" name="q" 
+                            <div class="col-md-7">
+                                <label for="search" class="form-label h4"   >Search Legal Topics</label>
+                                <input type="text" class="form-control form-control-lg" id="search" name="q" style="width: 1200px;"
                                        value="{{ query }}" placeholder="Try: bike accident, property dispute, consumer rights...">
                             </div>
                             
-                            <!-- Category Filter -->
-                            <div class="col-md-3">
-                                <label for="category" class="form-label">Category</label>
-                                <select class="form-select" id="category" name="category">
-                                    <option value="">All Categories</option>
-                                    {% for cat in categories %}
-                                        <option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>
-                                            {{ cat }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
                             
-                            <!-- State Filter -->
-                            <div class="col-md-3">
-                                <label for="state" class="form-label">State</label>
-                                <select class="form-select" id="state" name="state">
-                                    <option value="">All States</option>
-                                    {% for state in states %}
-                                        <option value="{{ state }}" {% if state == selected_state %}selected{% endif %}>
-                                            {{ state }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
+                           
                         
                         <div class="row mt-3">
                             <div class="col-12">
@@ -65,29 +40,33 @@
                                 </a>
                             </div>
                         </div>
+
+                        <div>
+                        </div>
+            <!-- Popular Topics Section -->
+    {% if not query %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3 class="mb-3">Popular Legal Topics</h3>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <a href="?q=bike accident" class="btn btn-outline-primary btn-sm"> Bike Accident</a>
+                <a href="?q=property dispute" class="btn btn-outline-primary btn-sm"> Property Dispute</a>
+                <a href="?q=consumer rights" class="btn btn-outline-primary btn-sm"> Consumer Rights</a>
+                <a href="?q=domestic violence" class="btn btn-outline-primary btn-sm"> Domestic Violence</a>
+                <a href="?q=employment rights" class="btn btn-outline-primary btn-sm"> Job Rights</a>
+                <a href="?q=police complaint" class="btn btn-outline-primary btn-sm"> Police Complaint</a>
+                <a href="?q=cybercrime" class="btn btn-outline-primary btn-sm"> Online Fraud</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Popular Topics Section -->
-    {% if not query %}
-    <div class="row mb-4">
-        <div class="col-12">
-            <h3 class="mb-3">Popular Legal Topics</h3>
-            <div class="d-flex flex-wrap gap-2 mb-4">
-                <a href="?q=bike accident" class="btn btn-outline-primary btn-sm">🏍️ Bike Accident</a>
-                <a href="?q=property dispute" class="btn btn-outline-primary btn-sm">🏠 Property Dispute</a>
-                <a href="?q=consumer rights" class="btn btn-outline-primary btn-sm">🛒 Consumer Rights</a>
-                <a href="?q=domestic violence" class="btn btn-outline-primary btn-sm">👩 Domestic Violence</a>
-                <a href="?q=employment rights" class="btn btn-outline-primary btn-sm">💼 Job Rights</a>
-                <a href="?q=police complaint" class="btn btn-outline-primary btn-sm">👮 Police Complaint</a>
-                <a href="?q=cybercrime" class="btn btn-outline-primary btn-sm">💻 Online Fraud</a>
-            </div>
-        </div>
-    </div>
-    {% endif %}
+
 
     <!-- Results Section -->
     <div class="row">
@@ -133,29 +112,7 @@
         </div>
     </div>
 
-    <!-- Quick Help Section -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <div class="card bg-light">
-                <div class="card-body text-center">
-                    <h4 class="card-title">Need Specific Legal Help?</h4>
-                    <p class="card-text">Can't find what you're looking for? Ask our AI legal assistant or connect with a qualified lawyer.</p>
-                    <div class="btn-group" role="group">
-                        <a href="{{ url_for('chat') }}" class="btn btn-primary">
-                            <i class="fas fa-robot"></i> Ask AI Assistant
-                        </a>
-                        <a href="{{ url_for('find_lawyer') }}" class="btn btn-success">
-                            <i class="fas fa-user-tie"></i> Find a Lawyer
-                        </a>
-                        <a href="{{ url_for('emergency_help') }}" class="btn btn-danger">
-                            <i class="fas fa-phone"></i> Emergency Help
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+  
 
 <style>
 .hover-card {
@@ -168,7 +125,7 @@
 }
 
 .bg-gradient-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg,rgb(23, 24, 29) 0%,rgb(45, 31, 60) 100%);
 }
 
 .form-control-lg, .form-select {
