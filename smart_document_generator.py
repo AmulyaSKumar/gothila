@@ -8,13 +8,16 @@ import json
 from datetime import datetime
 from typing import Dict, Any, List
 import google.generativeai as genai
+from dotenv import load_dotenv
+load_dotenv() 
 
 class SmartDocumentGenerator:
     """AI-powered legal document generator using Gemini 2.0 Flash"""
     
     def __init__(self):
         # Configure Gemini API
-        genai.configure(api_key="AIzaSyB55sz3cuGqePKJlZKolIDzJLRUXAOSeoc")
+        api_key = os.getenv("GENAI_API_KEY")
+        genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel('gemini-2.0-flash-exp')
         
         # Document templates with smart prompts
